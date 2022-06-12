@@ -1,0 +1,4 @@
+- name: Install APT Packages
+  snap:
+    name:
+      - slack
