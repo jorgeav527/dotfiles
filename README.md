@@ -30,3 +30,6 @@ Desktop configuration (MAC or UBUNTU 20.04)
 4. `sudo apt update`
 5. `sudo apt install brave-browser -y` --> https://brave.com/linux/
 
+## Install steam
+1. `sudo apt install steam`
+
