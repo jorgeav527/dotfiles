@@ -4,5 +4,5 @@
   become: true
 
   tasks:
-    - import_tasks: tasks/packages.yml
-    - import_tasks: tasks/snap_packages.yml
+    - import_tasks: tasks/apt.yml
+    - import_tasks: tasks/snap.yml
