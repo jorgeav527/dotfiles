@@ -1,4 +1,4 @@
 - name: Install Packages
   apt:
     name:
-      - ubuntu-restricted-extras
+      - htop
