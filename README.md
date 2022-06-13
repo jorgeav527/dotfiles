@@ -33,3 +33,13 @@ Desktop configuration (MAC or UBUNTU 20.04)
 ## Install steam
 1. `sudo apt install steam`
 
+## Install flatpak
+1. `sudo apt install flatpak`
+2. `sudo apt install gnome-software-plugin-flatpak`
+3. `flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo` --> https://flatpak.org/setup/Ubuntu
+
+## Install anaconda
+1. Download the installer from the archive https://repo.anaconda.com/archive/
+2. `bash ~/Downloads/Anaconda3-2020.02-Linux-x86_64.sh`
+3. `conda config --set auto_activate_base False`
+
