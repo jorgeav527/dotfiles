@@ -43,3 +43,10 @@ Desktop configuration (MAC or UBUNTU 20.04)
 2. `bash ~/Downloads/Anaconda3-2020.02-Linux-x86_64.sh`
 3. `conda config --set auto_activate_base False`
 
+## Install nodejs
+1. `sudo apt update`
+2. `sudo apt install nodejs npm -y`
+
+## Install Fzf
+1. `git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf`
+2. `~/.fzf/install`
