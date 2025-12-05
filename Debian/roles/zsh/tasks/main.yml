@@ -1,0 +1,28 @@
+---
+- name: Install Zsh
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+
+- name: Make Zsh default shell for current user
+  ansible.builtin.user:
+    name: "{{ lookup('env', 'USER') }}"
+    shell: /usr/bin/zsh
+
+# Oh-My-Zsh install (idempotent)
+- name: Install Oh-My-Zsh
+  ansible.builtin.shell: |
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
+  become: false
+
+# Powerlevel10k theme
+- name: Install Powerlevel10k theme
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    version: master
+  become: false
+

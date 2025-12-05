@@ -1,0 +1,48 @@
+---
+- name: Install Neovim
+  ansible.builtin.apt:
+    name: neovim
+    state: present
+
+- name: Install LazyGit
+  ansible.builtin.apt:
+    name: lazygit
+    state: present
+
+# Yazi via cargo (needs Rust from 'languages' role)
+- name: Install Yazi (file manager)
+  ansible.builtin.shell: |
+    "{{ lookup('env', 'HOME') }}/.cargo/bin/cargo" install --locked yazi-fm yazi-cli
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.cargo/bin/yazi"
+  become: false
+
+# Brave browser: add repo and install
+- name: Add Brave APT key
+  ansible.builtin.shell: |
+    curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg \
+      https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+
+- name: Add Brave APT repository
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/brave-browser-release.list
+    content: |
+      deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main
+
+- name: Update apt cache after adding Brave repo
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install Brave browser
+  ansible.builtin.apt:
+    name: brave-browser
+    state: present
+
+# Steam (may require non-free/multiverse enabled on Debian)
+- name: Install Steam
+  ansible.builtin.apt:
+    name: steam
+    state: present
+  ignore_errors: yes   # in case non-free repos are not enabled yet

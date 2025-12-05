@@ -1,0 +1,5 @@
+---
+- name: Install Kitty terminal
+  ansible.builtin.apt:
+    name: kitty
+    state: present

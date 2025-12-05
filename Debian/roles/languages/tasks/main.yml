@@ -1,0 +1,40 @@
+---
+# Python
+- name: Install Python & tools
+  ansible.builtin.apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+    state: present
+
+# Go (Debian package)
+- name: Install Go
+  ansible.builtin.apt:
+    name: golang
+    state: present
+
+# Rust (rustup)
+- name: Install Rust with rustup
+  ansible.builtin.shell: |
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+      | sh -s -- -y
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.cargo/bin/rustc"
+  become: false
+
+# uv (Python package manager)
+- name: Install uv
+  ansible.builtin.shell: |
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.local/bin/uv"
+  become: false
+
+# nvm (Node Version Manager)
+- name: Install nvm
+  ansible.builtin.shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.nvm"
+  become: false

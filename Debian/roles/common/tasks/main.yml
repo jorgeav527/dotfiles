@@ -1,0 +1,19 @@
+---
+- name: Ensure apt cache is up to date
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install common base packages
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - git
+      - curl
+      - wget
+      - unzip
+      - stow        # for dotfiles
+      - ripgrep
+      - fd-find
+      - fzf
+      - ca-certificates
+    state: present

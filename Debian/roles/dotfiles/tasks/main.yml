@@ -1,0 +1,29 @@
+---
+- name: Check that dotfiles repo exists
+  ansible.builtin.stat:
+    path: "{{ dotfiles_repo }}"
+  register: dotfiles_repo_stat
+
+- name: Fail if dotfiles repo is missing
+  ansible.builtin.fail:
+    msg: "Dotfiles repo not found at {{ dotfiles_repo }}. Clone it first."
+  when: not dotfiles_repo_stat.stat.exists
+
+# Stow each dotfiles package if present
+- name: Stow dotfiles packages
+  ansible.builtin.shell: |
+    stow -t "$HOME" "{{ item }}"
+  args:
+    chdir: "{{ dotfiles_repo }}"
+  become: false
+  loop:
+    - zsh
+    - nvim
+    - kitty
+    - lazygit
+    - yazi
+    - git
+    - fzf
+  register: stow_result
+  changed_when: false
+  failed_when: stow_result.rc not in [0]

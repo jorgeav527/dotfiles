@@ -1,0 +1,16 @@
+
+---
+- name: Setup local Debian dev machine
+  hosts: local
+  become: true
+
+  vars:
+    dotfiles_repo: "{{ lookup('env', 'HOME') }}/Devspace/dotfiles"
+
+  roles:
+    - common      # base packages, stow, tools
+    - languages   # Python, Go, Rust, uv, nvm
+    - terminal    # kitty, terminal goodies
+    - zsh         # zsh + oh-my-zsh + powerlevel10k
+    - apps        # neovim, lazygit, yazi, Brave, Steam
+    - dotfiles    # stow all your dotfiles
