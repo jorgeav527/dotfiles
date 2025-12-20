@@ -160,23 +160,50 @@ return {
                     },
                 },
             },
-            pylsp = {
+            -- pylsp = {
+            --     settings = {
+            --         pylsp = {
+            --             plugins = {
+            --                 pyflakes = { enabled = false },
+            --                 pycodestyle = { enabled = false },
+            --                 autopep8 = { enabled = false },
+            --                 yapf = { enabled = false },
+            --                 mccabe = { enabled = false },
+            --                 pylsp_mypy = { enabled = false },
+            --                 pylsp_black = { enabled = false },
+            --                 pylsp_isort = { enabled = false },
+            --             },
+            --         },
+            --     },
+            -- },
+            vue_ls = {
+                filetypes = { 'vue' },
+            },
+
+            vtsls = {
+                filetypes = {
+                    'typescript',
+                    'javascript',
+                    'typescriptreact',
+                    'javascriptreact',
+                    'vue',
+                },
                 settings = {
-                    pylsp = {
-                        plugins = {
-                            pyflakes = { enabled = false },
-                            pycodestyle = { enabled = false },
-                            autopep8 = { enabled = false },
-                            yapf = { enabled = false },
-                            mccabe = { enabled = false },
-                            pylsp_mypy = { enabled = false },
-                            pylsp_black = { enabled = false },
-                            pylsp_isort = { enabled = false },
+                    vtsls = {
+                        tsserver = {
+                            globalPlugins = {
+                                {
+                                    name = '@vue/typescript-plugin',
+                                    location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+                                    languages = { 'vue' },
+                                },
+                            },
                         },
                     },
                 },
             },
             ruff = {},
+            pyrefly = {},
             jsonls = {},
             sqlls = {},
             terraformls = {},

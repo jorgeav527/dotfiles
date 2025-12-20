@@ -61,9 +61,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     pattern = '*',
 })
 
--- -------------------------
+-------------------------
 -- Makefile Settings
--- -------------------------
+-------------------------
 vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'make' },
     callback = function()
@@ -75,11 +75,11 @@ vim.api.nvim_create_autocmd('FileType', {
 -- -------------------------
 -- Detect Helm YAML
 -- -------------------------
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-    pattern = { '*.yaml', '*.yml' },
-    callback = function()
-        if vim.fn.getline(1):match '^apiVersion:' or vim.fn.getline(2):match '^apiVersion:' then
-            vim.opt_local.filetype = 'helm'
-        end
-    end,
-})
+-- vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+--     pattern = { '*.yaml', '*.yml' },
+--     callback = function()
+--         if vim.fn.getline(1):match '^apiVersion:' or vim.fn.getline(2):match '^apiVersion:' then
+--             vim.opt_local.filetype = 'helm'
+--         end
+--     end,
+-- })
