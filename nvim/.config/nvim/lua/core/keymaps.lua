@@ -10,6 +10,7 @@ local opts = { noremap = true, silent = true }
 
 -- save file
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>', opts)
+vim.keymap.set('i', '<C-s>', '<Esc><cmd>w<CR>a', opts)
 
 -- save file without auto-formatting
 vim.keymap.set('n', '<leader>sn', '<cmd>noautocmd w <CR>', opts)
@@ -83,11 +84,3 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<C-a>', 'ggVG', opts)
 vim.keymap.set('i', '<C-a>', '<Esc>ggVG', opts)
 vim.keymap.set('v', '<C-a>', 'ggVG', opts)
-
--- VISUAL mode
-vim.keymap.set('v', '<A-down>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
-vim.keymap.set('v', '<A-up>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
-
--- INSERT mode
-vim.keymap.set('i', '<A-down>', '<Esc>:m .+1<CR>==gi', { desc = 'Move line down' })
-vim.keymap.set('i', '<A-up>', '<Esc>:m .-2<CR>==gi', { desc = 'Move line up' })

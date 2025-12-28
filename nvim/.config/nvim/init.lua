@@ -34,8 +34,12 @@ require('lazy').setup {
     require 'plugins.autoformatting',
     require 'plugins.gitsigns',
     require 'plugins.indentline',
-    require 'plugins.comments',
     require 'plugins.any',
     require 'plugins.lazygit',
     require 'plugins.spectre',
+    require 'plugins.splitjoin',
+    require 'plugins.mini.comment',
+    require 'plugins.mini.move',
+    require 'plugins.mini.pairs',
+    require 'plugins.mini.surround',
 }
