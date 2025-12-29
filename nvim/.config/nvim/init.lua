@@ -42,4 +42,5 @@ require('lazy').setup {
     require 'plugins.mini.move',
     require 'plugins.mini.pairs',
     require 'plugins.mini.surround',
+    require 'plugins.git_nvim',
 }
