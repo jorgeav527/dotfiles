@@ -97,6 +97,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+
 export EDITOR="nvim"
 
 # Yazi wrapper to change directory after exit
@@ -114,3 +116,8 @@ function y() {
 }
 
 source ~/fzf-git.sh/fzf-git.sh
+
+# Edit command line in editor
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
