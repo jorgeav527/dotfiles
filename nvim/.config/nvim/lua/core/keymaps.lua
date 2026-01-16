@@ -78,3 +78,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<C-a>', 'ggVG', opts)
 vim.keymap.set('i', '<C-a>', '<Esc>ggVG', opts)
 vim.keymap.set('v', '<C-a>', 'ggVG', opts)
+
+-- Once everything is highlighted, you can clear it with
+vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>')

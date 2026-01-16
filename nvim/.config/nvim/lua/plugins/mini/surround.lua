@@ -39,3 +39,11 @@ return {
         }
     end,
 }
+
+-- s + action + text-object/surrounds
+-- a i w "     → add
+-- s d "       → delete
+-- s r " '     → replace
+-- s f (       → find right
+-- s F (       → find left
+-- s h {       → highlight
