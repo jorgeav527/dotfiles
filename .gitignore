@@ -1,0 +1,9 @@
+# Ignore Neovim plugin snapshots (machine-specific)
+**/lazy-lock.json
+
+# Ansible noise
+*.retry
+*.pyc
+
+# System noise
+.DS_Store
