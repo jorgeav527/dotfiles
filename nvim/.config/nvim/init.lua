@@ -13,19 +13,10 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Import color theme based on environment variable NVIM_THEME
-local color_scheme = 'tokyonight'
-
--- Define a table of theme modules
-local themes = {
-    nord = 'plugins.themes.nord',
-    tokyonight = 'plugins.themes.tokyonight',
-}
 -- Set up plugin
-require('lazy').setup {
+local plugins = {
+    require 'plugins.themes.thorn', -- Add your new theme here
     require 'plugins.neotree',
-    require(themes[color_scheme]),
-    -- require 'plugins.colortheme',
     require 'plugins.lualine',
     require 'plugins.treesitter',
     require 'plugins.telescope',
@@ -44,3 +35,5 @@ require('lazy').setup {
     require 'plugins.mini.surround',
     require 'plugins.git_nvim',
 }
+
+require('lazy').setup(plugins)
