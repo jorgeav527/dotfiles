@@ -23,7 +23,7 @@ local plugins = {
     require 'plugins.lsp',
     require 'plugins.autocompletion',
     require 'plugins.autoformatting',
-    require 'plugins.signs_git',
+    require 'plugins.gitsigns',
     require 'plugins.indentline',
     require 'plugins.any',
     require 'plugins.lazygit',
@@ -33,7 +33,7 @@ local plugins = {
     require 'plugins.mini.move',
     require 'plugins.mini.pairs',
     require 'plugins.mini.surround',
-    require 'lua.plugins.nvim_git',
+    require 'lua.plugins.gitnvim',
 }
 
 require('lazy').setup(plugins)
