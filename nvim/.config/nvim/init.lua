@@ -33,7 +33,7 @@ local plugins = {
     require 'plugins.mini.move',
     require 'plugins.mini.pairs',
     require 'plugins.mini.surround',
-    require 'lua.plugins.gitnvim',
+    require 'plugins.gitnvim',
 }
 
 require('lazy').setup(plugins)
