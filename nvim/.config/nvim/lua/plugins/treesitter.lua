@@ -16,6 +16,8 @@ return {
                 'vimdoc',
                 'vim',
                 'regex',
+                'rust',
+                'ron',
                 'terraform',
                 'sql',
                 'dockerfile',

@@ -18,6 +18,7 @@ return {
                 'checkmake', -- linter for Makefiles
                 'stylua', -- lua formatter; Already installed via Mason
                 'ruff', -- Python linter and formatter; Already installed via Mason
+                'rustfmt', -- Add this for rust formatting
             },
             automatic_installation = true,
         }

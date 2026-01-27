@@ -176,6 +176,28 @@ return {
             --         },
             --     },
             -- },
+            rust_analyzer = {
+                settings = {
+                    ['rust-analyzer'] = {
+                        -- This is the fixed part:
+                        check = {
+                            command = 'clippy',
+                        },
+                        checkOnSave = true,
+                        -- End of fix
+
+                        procMacro = {
+                            enable = true,
+                        },
+                        cargo = {
+                            allFeatures = true,
+                        },
+                        diagnostics = {
+                            enable = true,
+                        },
+                    },
+                },
+            },
             vue_ls = {
                 filetypes = { 'vue' },
             },
