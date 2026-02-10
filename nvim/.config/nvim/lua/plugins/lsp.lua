@@ -184,7 +184,9 @@ return {
                             command = 'clippy',
                         },
                         checkOnSave = true,
-                        -- End of fix
+                        rustfmt = {
+                            overrideCommand = { 'rustfmt', '--emit=stdout' },
+                        },
 
                         procMacro = {
                             enable = true,

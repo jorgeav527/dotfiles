@@ -18,7 +18,7 @@ return {
                 'checkmake', -- linter for Makefiles
                 'stylua', -- lua formatter; Already installed via Mason
                 'ruff', -- Python linter and formatter; Already installed via Mason
-                'rustfmt', -- Add this for rust formatting
+                --                 'rustfmt', -- Add this for rust formatting
             },
             automatic_installation = true,
         }
@@ -41,6 +41,7 @@ return {
             formatting.stylua,
             formatting.shfmt.with { args = { '-i', '4' } },
             formatting.terraform_fmt,
+            --             formatting.rustfmt,
             require('none-ls.formatting.ruff').with { extra_args = { '--extend-select', 'I' } },
             require 'none-ls.formatting.ruff_format',
         }
@@ -51,6 +52,20 @@ return {
             sources = sources,
             -- you can reuse a shared lspconfig on_attach callback here
             on_attach = function(client, bufnr)
+                if client.name == 'rust_analyzer' then
+                    client.server_capabilities.documentFormattingProvider = true
+
+                    -- Autosave Rust using :RustFmt
+                    vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+                    vim.api.nvim_create_autocmd('BufWritePre', {
+                        group = augroup,
+                        buffer = bufnr,
+                        callback = function()
+                            vim.cmd 'RustFmt'
+                        end,
+                    })
+                    return
+                end
                 if client:supports_method 'textDocument/formatting' then
                     vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
                     vim.api.nvim_create_autocmd('BufWritePre', {
