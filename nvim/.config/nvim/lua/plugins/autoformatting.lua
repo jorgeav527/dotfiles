@@ -18,7 +18,10 @@ return {
                 'checkmake', -- linter for Makefiles
                 'stylua', -- lua formatter; Already installed via Mason
                 'ruff', -- Python linter and formatter; Already installed via Mason
-                --                 'rustfmt', -- Add this for rust formatting
+                -- 'rustfmt', -- Add this for rust formatting
+                'rustfmt', -- Add this for rust formatting
+                'goimports', -- To automatically add/remove imports on save
+                'golangci-lint', -- The standard linter runner for Go
             },
             automatic_installation = true,
         }
@@ -41,9 +44,12 @@ return {
             formatting.stylua,
             formatting.shfmt.with { args = { '-i', '4' } },
             formatting.terraform_fmt,
-            --             formatting.rustfmt,
+            -- formatting.rustfmt,
             require('none-ls.formatting.ruff').with { extra_args = { '--extend-select', 'I' } },
             require 'none-ls.formatting.ruff_format',
+            require('none-ls.formatting.ruff').with { extra_args = { '--extend-select', 'I' } },
+            formatting.goimports,
+            formatting.gofumpt,
         }
 
         local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
