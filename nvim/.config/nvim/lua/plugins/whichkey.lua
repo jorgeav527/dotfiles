@@ -25,6 +25,7 @@ return {
             { '<leader>G', icon = '󰊢 ', desc = 'Float Git Status' },
             { '<leader>g', desc = 'Git' },
             { '<leader>h', desc = 'GitHub' },
+            { '<leader>l', icon = 'L', desc = 'Lazy' },
         }
     end,
     -- Your visual settings move here

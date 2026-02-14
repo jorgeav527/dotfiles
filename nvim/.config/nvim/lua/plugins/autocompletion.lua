@@ -77,7 +77,8 @@ return { -- Autocompletion
                 ['<C-k>'] = cmp.mapping.select_prev_item(), -- Select the [p]revious item
                 ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept the completion with Enter.
                 ['<C-Space>'] = cmp.mapping.complete {}, -- Manually trigger a completion from nvim-cmp.
-
+                ['<C-d>'] = cmp.mapping.scroll_docs(4),
+                ['<C-u>'] = cmp.mapping.scroll_docs(-4),
                 -- Think of <c-l> as moving to the right of your snippet expansion.
                 --  So if you have a snippet that's like:
                 --  function $name($args)
@@ -95,6 +96,13 @@ return { -- Autocompletion
                     if luasnip.locally_jumpable(-1) then
                         luasnip.jump(-1)
                     end
+                end, { 'i', 's' }),
+
+                ['<Down>'] = cmp.mapping(function(fallback)
+                    fallback()
+                end, { 'i', 's' }),
+                ['<Up>'] = cmp.mapping(function(fallback)
+                    fallback()
                 end, { 'i', 's' }),
 
                 -- Select next/previous item with Tab / Shift + Tab

@@ -120,8 +120,8 @@ return {
             end, '󰊢 All Hunks to Quickfix')
 
             -- Toggles
-            map('n', '<leader>tb', gitsigns.toggle_current_line_blame, '󰊢 Toggle Line Blame')
-            map('n', '<leader>tw', gitsigns.toggle_word_diff, '󰊢 Toggle Word Diff')
+            map('n', '<leader>hh', gitsigns.toggle_current_line_blame, '󰊢 Toggle Line Blame')
+            map('n', '<leader>hw', gitsigns.toggle_word_diff, '󰊢 Toggle Word Diff')
 
             -- Text object (e.g., 'dah' to delete a hunk)
             map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, '󰊢 Select Hunk')
