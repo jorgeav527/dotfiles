@@ -18,6 +18,13 @@ return {
             { '<leader>f.', icon = '󰍉', desc = '[F]ind in current [.] Buffer' },
             { '<leader>n', group = 'Next', icon = '󰒭 ' },
             { '<leader>p', group = 'Previous', icon = '󰒮 ' },
+            { '<leader>c', group = 'Code', icon = '󰅨' },
+            { '<leader>s', group = 'Search/Replace (Spectre)', icon = '󰛔 ' },
+            { '<leader>e', icon = '󰙅 ', desc = 'Left Explorer' },
+            { '<leader>E', icon = '󰭔 ', desc = 'Float Explorer' },
+            { '<leader>G', icon = '󰊢 ', desc = 'Float Git Status' },
+            { '<leader>g', desc = 'Git' },
+            { '<leader>h', desc = 'GitHub' },
         }
     end,
     -- Your visual settings move here

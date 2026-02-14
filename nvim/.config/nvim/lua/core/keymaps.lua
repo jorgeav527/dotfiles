@@ -5,9 +5,6 @@ vim.g.maplocalleader = ' '
 -- Disable the spacebar key's default behavior in Normal and Visual modes
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
--- For conciseness
-local opts = { noremap = true, silent = true }
-
 -- save file
 vim.keymap.set('n', '<C-s>', '<cmd>w<CR>', { desc = 'general save file' })
 vim.keymap.set('i', '<C-s>', '<Esc><cmd>w<CR>', { desc = 'Save file' })
@@ -32,7 +29,7 @@ vim.keymap.set('n', '<C-Left>', ':wincmd h<CR>', { desc = 'Go to left window' })
 vim.keymap.set('n', '<C-Right>', ':wincmd l<CR>', { desc = 'Go to right window' })
 
 -- Toggle line wrapping
-vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', { desc = 'Toggle line wrap' })
+vim.keymap.set('n', '<leader>cw', '<cmd>set wrap!<CR>', { desc = 'Toggle line wrap' })
 
 -- Cycle through buffers
 vim.keymap.set('n', '<Tab>', ':bnext<CR>', { desc = 'Next buffer' })

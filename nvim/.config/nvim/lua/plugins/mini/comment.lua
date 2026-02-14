@@ -12,7 +12,7 @@ return {
                 ignore_blank_line = true,
 
                 -- Whether to ignore blank lines in actions and textobject
-                start_of_line = true,
+                start_of_line = false,
 
                 -- Whether to force single space inner padding for comment parts
                 pad_comment_parts = true,
