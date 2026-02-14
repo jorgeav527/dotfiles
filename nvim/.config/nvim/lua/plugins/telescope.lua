@@ -24,6 +24,7 @@ return {
 
         require('telescope').setup {
             defaults = {
+                wrap_results = true,
                 layout_strategy = 'horizontal',
                 layout_config = {
                     horizontal = {
@@ -35,9 +36,8 @@ return {
                 },
                 mappings = {
                     i = {
-                        ['<C-k>'] = actions.move_selection_previous, -- move to prev result
-                        ['<C-j>'] = actions.move_selection_next, -- move to next result
-                        ['<C-l>'] = actions.select_default, -- open file
+                        ['<C-u>'] = actions.preview_scrolling_up,
+                        ['<C-d>'] = actions.preview_scrolling_down,
                     },
                     n = {
                         ['q'] = actions.close,
