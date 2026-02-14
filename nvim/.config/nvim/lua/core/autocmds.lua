@@ -52,13 +52,15 @@ vim.diagnostic.config {
 }
 
 -- Highlight on yank
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Highlight yanked text in yellow',
+    group = vim.api.nvim_create_augroup('YankHighlight', { clear = true }),
     callback = function()
-        vim.hl.on_yank()
+        vim.hl.on_yank {
+            higroup = 'IncSearch', -- This is usually yellow in NvChad
+            timeout = 300, -- Stay visible for 300ms
+        }
     end,
-    group = highlight_group,
-    pattern = '*',
 })
 
 -------------------------
@@ -82,4 +84,12 @@ vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
             vim.opt_local.filetype = 'helm'
         end
     end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = '*',
+    callback = function()
+        vim.opt.formatoptions:remove { 'c', 'r', 'o' }
+    end,
+    desc = 'Stop Neovim from automatically starting a new comment line',
 })
