@@ -49,8 +49,8 @@ return {
                 keymaps = {
                     init_selection = '<c-space>',
                     node_incremental = '<c-space>',
+                    node_decremental = '<bs>',
                     scope_incremental = '<c-s>',
-                    node_decremental = '<M-space>',
                 },
             },
             textobjects = {
@@ -71,29 +71,29 @@ return {
                     enable = true,
                     set_jumps = true, -- whether to set jumps in the jumplist
                     goto_next_start = {
-                        [']f'] = '@function.outer',
-                        [']c'] = '@class.outer',
+                        ['<leader>nf'] = '@function.outer',
+                        ['<leader>nc'] = '@class.outer',
                     },
                     goto_next_end = {
-                        [']F'] = '@function.outer',
-                        [']C'] = '@class.outer',
+                        ['<leader>nF'] = '@function.outer',
+                        ['<leader>nC'] = '@class.outer',
                     },
                     goto_previous_start = {
-                        ['[f'] = '@function.outer',
-                        ['[c'] = '@class.outer',
+                        ['<leader>pf'] = '@function.outer',
+                        ['<leader>pc'] = '@class.outer',
                     },
                     goto_previous_end = {
-                        ['[F'] = '@function.outer',
-                        ['[C'] = '@class.outer',
+                        ['<leader>pF'] = '@function.outer',
+                        ['<leader>pC'] = '@class.outer',
                     },
                 },
                 swap = {
                     enable = true,
                     swap_next = {
-                        ['<leader>a'] = '@parameter.inner',
+                        ['<leader>ns'] = '@parameter.inner',
                     },
                     swap_previous = {
-                        ['<leader>A'] = '@parameter.inner',
+                        ['<leader>ps'] = '@parameter.inner',
                     },
                 },
             },

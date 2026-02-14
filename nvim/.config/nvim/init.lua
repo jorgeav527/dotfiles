@@ -34,6 +34,7 @@ local plugins = {
     require 'plugins.mini.pairs',
     require 'plugins.mini.surround',
     require 'plugins.gitnvim',
+    require 'plugins.whichkey',
 }
 
 require('lazy').setup(plugins)
