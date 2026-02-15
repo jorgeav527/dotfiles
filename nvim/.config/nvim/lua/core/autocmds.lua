@@ -1,7 +1,4 @@
--- Custom code snippets for different purposes
--- -------------------------
 -- Cursorline Highlighting
--- -------------------------
 local cursorline_group = vim.api.nvim_create_augroup('cursorline', { clear = true })
 
 vim.api.nvim_create_autocmd({ 'VimEnter', 'WinEnter', 'BufWinEnter' }, {
@@ -58,7 +55,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function()
         vim.hl.on_yank {
             higroup = 'IncSearch', -- This is usually yellow in NvChad
-            timeout = 300, -- Stay visible for 300ms
+            timeout = 100, -- Stay visible for 300ms
         }
     end,
 })
@@ -92,4 +89,10 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.opt.formatoptions:remove { 'c', 'r', 'o' }
     end,
     desc = 'Stop Neovim from automatically starting a new comment line',
+})
+
+vim.api.nvim_create_autocmd('FocusLost', {
+    pattern = '*',
+    command = 'silent! wa',
+    desc = 'Auto-save all buffers when Neovim loses focus',
 })

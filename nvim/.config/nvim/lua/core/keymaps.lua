@@ -11,7 +11,7 @@ vim.keymap.set('i', '<C-s>', '<Esc><cmd>w<CR>', { desc = 'Save file' })
 vim.keymap.set('n', '<C-c>', '<cmd>%y+<CR>', { desc = 'general copy whole file' })
 
 -- Quit
-vim.keymap.set('n', '<C-q>', '<cmd>q<CR>', { desc = 'Quit current window' })
+vim.keymap.set({ 'n', 'i', 'v' }, '<C-q>', '<cmd>wqall<CR>', { desc = 'Save and Quit All' })
 
 -- Black Hole Deletion (No yanking)
 vim.keymap.set('n', 'x', '"_x', { desc = 'Delete char (no yank)' })
