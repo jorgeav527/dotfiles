@@ -120,22 +120,6 @@ return {
                     },
                 },
             },
-            -- pylsp = {
-            --     settings = {
-            --         pylsp = {
-            --             plugins = {
-            --                 pyflakes = { enabled = false },
-            --                 pycodestyle = { enabled = false },
-            --                 autopep8 = { enabled = false },
-            --                 yapf = { enabled = false },
-            --                 mccabe = { enabled = false },
-            --                 pylsp_mypy = { enabled = false },
-            --                 pylsp_black = { enabled = false },
-            --                 pylsp_isort = { enabled = false },
-            --             },
-            --         },
-            --     },
-            -- },
             gopls = {
                 settings = {
                     gopls = {
@@ -144,30 +128,6 @@ return {
                         },
                         staticcheck = true,
                         gofumpt = true, -- A stricter gofmt
-                    },
-                },
-            },
-            rust_analyzer = {
-                settings = {
-                    ['rust-analyzer'] = {
-                        -- This is the fixed part:
-                        check = {
-                            command = 'clippy',
-                        },
-                        checkOnSave = true,
-                        rustfmt = {
-                            overrideCommand = { 'rustfmt', '--emit=stdout' },
-                        },
-
-                        procMacro = {
-                            enable = true,
-                        },
-                        cargo = {
-                            allFeatures = true,
-                        },
-                        diagnostics = {
-                            enable = true,
-                        },
                     },
                 },
             },

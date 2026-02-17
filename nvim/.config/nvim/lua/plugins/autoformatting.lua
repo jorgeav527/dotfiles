@@ -18,8 +18,6 @@ return {
                 'checkmake', -- linter for Makefiles
                 'stylua', -- lua formatter; Already installed via Mason
                 'ruff', -- Python linter and formatter; Already installed via Mason
-                -- 'rustfmt', -- Add this for rust formatting
-                'rustfmt', -- Add this for rust formatting
                 'goimports', -- To automatically add/remove imports on save
                 'golangci-lint', -- The standard linter runner for Go
             },
@@ -58,20 +56,6 @@ return {
             sources = sources,
             -- you can reuse a shared lspconfig on_attach callback here
             on_attach = function(client, bufnr)
-                if client.name == 'rust_analyzer' then
-                    client.server_capabilities.documentFormattingProvider = true
-
-                    -- Autosave Rust using :RustFmt
-                    vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-                    vim.api.nvim_create_autocmd('BufWritePre', {
-                        group = augroup,
-                        buffer = bufnr,
-                        callback = function()
-                            vim.cmd 'RustFmt'
-                        end,
-                    })
-                    return
-                end
                 if client:supports_method 'textDocument/formatting' then
                     vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
                     vim.api.nvim_create_autocmd('BufWritePre', {
