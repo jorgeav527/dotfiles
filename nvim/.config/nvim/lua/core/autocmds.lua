@@ -96,3 +96,8 @@ vim.api.nvim_create_autocmd('FocusLost', {
     command = 'silent! wa',
     desc = 'Auto-save all buffers when Neovim loses focus',
 })
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = '*.rs',
+    command = 'DxFormatBuffer',
+})

@@ -6,6 +6,15 @@ return {
         ft = 'rust',
     },
     {
+        'mrxiaozhuox/dioxus.nvim',
+        opts = {
+            format = {
+                split_line_attributes = false,
+            },
+        },
+        ft = 'rust',
+    },
+    {
         'rust-lang/rust.vim',
         ft = 'rust',
         init = function()
