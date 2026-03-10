@@ -10,6 +10,9 @@ vim.keymap.set('n', '<C-s>', '<cmd>w<CR>', { desc = 'general save file' })
 vim.keymap.set('i', '<C-s>', '<Esc><cmd>w<CR>', { desc = 'Save file' })
 vim.keymap.set('n', '<C-c>', '<cmd>%y+<CR>', { desc = 'general copy whole file' })
 
+-- select all lines
+vim.keymap.set({ 'n', 'i', 'v' }, '<C-a>', '<Esc>ggVG', { desc = 'Select all' })
+
 -- Quit
 vim.keymap.set({ 'n', 'i', 'v' }, '<C-q>', '<cmd>wqall<CR>', { desc = 'Save and Quit All' })
 

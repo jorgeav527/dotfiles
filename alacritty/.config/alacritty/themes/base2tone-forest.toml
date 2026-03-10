@@ -1,0 +1,43 @@
+# Base2Tone Forest Dark
+# Info: https://base2t.one/demo/forest/
+
+[colors.primary]
+background = "#2a2d2a" # A0 (Darkest Background)
+foreground = "#a1a58d" # C2 (Readable Sage)
+dim_foreground = "#7d816a" # C0 (Muted Sage)
+
+[colors.cursor]
+text = "#2a2d2a" # A0
+cursor = "#b1c44f" # D3 (Bright Accent)
+
+[colors.selection]
+text = "#eaecdf" # C6 (Light)
+background = "#485148" # A2 (Selection Highlight)
+
+[colors.normal]
+black   = "#2a2d2a" # A0
+red     = "#656b47" # D0
+green   = "#818b4b" # D1
+yellow  = "#a2b34d" # D2
+blue    = "#7d816a" # C0
+magenta = "#90947a" # C1
+cyan    = "#a1a58d" # C2
+white   = "#b2b5a1" # C3
+
+[colors.bright]
+black   = "#535f53" # A3
+red     = "#bfd454" # D4
+green   = "#cbe25a" # D5
+yellow  = "#daf06a" # D6
+blue    = "#e5fb79" # D7
+magenta = "#c3c6b3" # C4
+cyan    = "#d7dac8" # C5
+white   = "#fbfbf8" # C7 (Purest Light)
+
+[colors.search.matches]
+foreground = "#2a2d2a"
+background = "#b1c44f" # D3
+
+[colors.footer_bar]
+background = "#353b35" # A1
+foreground = "#eaecdf" # C6
