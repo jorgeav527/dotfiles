@@ -7,3 +7,6 @@
 
 # System noise
 .DS_Store
+
+# For the tmux
+tmux/.config/tmux/plugins/*
