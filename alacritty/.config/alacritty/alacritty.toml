@@ -1,11 +1,14 @@
 [general]
-import = ["~/.config/alacritty/themes/base2tone-forest.toml"]
+import = ["~/.config/alacritty/themes/gruvbox-dark-soft-contrast.toml"]
 
 [window]
 startup_mode = "Maximized"  # Default: "Windowed"
+decorations = "none"
+padding = { x = 5, y = 0 }
+opacity = 0.90
 
 [font]
-size = 11
+size = 11.5
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
 bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
 italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
@@ -24,5 +27,6 @@ bindings = [
   # Super + Q to Quit
   { key = "Q", mods = "Control|Shift", action = "Quit" },
   # Super + N for New Window
-  { key = "N", mods = "Control|Shift", action = "CreateNewWindow" },
+  { key = "T", mods = "Control|Shift", action = "CreateNewWindow" },
 ]
+
