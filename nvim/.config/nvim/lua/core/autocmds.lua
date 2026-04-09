@@ -15,6 +15,13 @@ vim.api.nvim_create_autocmd('WinLeave', {
     end,
 })
 
+vim.filetype.add {
+    pattern = {
+        -- force ANY .html file to be HTML, no matter the syntax inside
+        ['.*%.html'] = 'html',
+    },
+}
+
 -- Prevent LSP from overwriting treesitter color settings
 -- https://github.com/NvChad/NvChad/issues/1907
 vim.hl.priorities.semantic_tokens = 95 -- Or any number lower than 100, treesitter's priority level
@@ -101,3 +108,22 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     pattern = '*.rs',
     command = 'DxFormatBuffer',
 })
+
+vim.keymap.set('n', '<leader>ba', function()
+    vim.fn.setreg('+', vim.fn.expand '%:p')
+    print('Copied absolute path: ' .. vim.fn.expand '%:p')
+end)
+
+vim.keymap.set('n', '<leader>br', function()
+    local fullpath = vim.fn.expand '%:p'
+    local cwd = vim.fn.getcwd()
+
+    -- Escape special chars in Lua patterns
+    cwd = cwd:gsub('([%-%.%+%[%]%(%)%$%^%%%?%*])', '%%%1')
+
+    -- Remove the cwd part from the full path
+    local relative = fullpath:gsub('^' .. cwd .. '/', '')
+
+    vim.fn.setreg('+', relative)
+    print('Copied relative path: ' .. relative)
+end)

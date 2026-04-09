@@ -15,7 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Set up plugin
 local plugins = {
-    require 'plugins.themes.thorn', -- Add your new theme here
+    require 'plugins.themes.gruvbox', -- Add your new theme here
     require 'plugins.neotree',
     require 'plugins.lualine',
     require 'plugins.treesitter',

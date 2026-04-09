@@ -4,6 +4,7 @@ return {
     build = ':TSUpdate',
     dependencies = {
         'nvim-treesitter/nvim-treesitter-textobjects',
+        'nvim-treesitter/playground',
     },
     config = function()
         require('nvim-treesitter.configs').setup {
@@ -37,6 +38,8 @@ return {
                 'tsx',
                 'css',
                 'html',
+                -- npm install -g https://github.com/s-kris/prettier-plugin-tera
+                'tera',
             },
 
             -- Autoinstall languages that are not installed
