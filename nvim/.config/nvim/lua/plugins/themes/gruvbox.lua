@@ -22,6 +22,7 @@ return {
             contrast = '', -- can be "hard", "soft" or empty string
             palette_overrides = {},
             overrides = {
+                -- SignColumn = { bg = '#ff9900' },
                 -- ['@lsp.type.method'] = { bg = '#ff9900' },
                 -- ['@comment.lua'] = { bg = '#000000' },
             },
