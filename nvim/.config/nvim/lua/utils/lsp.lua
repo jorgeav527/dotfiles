@@ -16,11 +16,21 @@ M.on_attach = function(event)
 	-- native neovim keymaps
 	keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition", buffer = bufnr })
 	keymap("n", "gD", "<cmd>Lspsaga goto_definition<CR>", { desc = "Goto Definition", buffer = bufnr })
-	keymap("n", "<leader>ls", "<cmd>vsplit | Lspsaga goto_definition<CR>", { desc = "Goto Definition (Split)", buffer = bufnr })
+	keymap(
+		"n",
+		"<leader>ls",
+		"<cmd>vsplit | Lspsaga goto_definition<CR>",
+		{ desc = "Goto Definition (Split)", buffer = bufnr }
+	)
 	keymap("n", "<leader>la", "<cmd>Lspsaga code_action<CR>", { desc = "Code Action", buffer = bufnr })
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>", { desc = "Rename Symbol", buffer = bufnr })
 	keymap("n", "<leader>ld", "<cmd>Lspsaga show_line_diagnostics<CR>", { desc = "Line Diagnostics", buffer = bufnr })
-	keymap("n", "<leader>lD", "<cmd>Lspsaga show_cursor_diagnostics<CR>", { desc = "Cursor Diagnostics", buffer = bufnr })
+	keymap(
+		"n",
+		"<leader>lD",
+		"<cmd>Lspsaga show_cursor_diagnostics<CR>",
+		{ desc = "Cursor Diagnostics", buffer = bufnr }
+	)
 	keymap("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { desc = "Prev Diagnostic", buffer = bufnr })
 	keymap("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "Next Diagnostic", buffer = bufnr })
 	keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", { desc = "Hover Documentation", buffer = bufnr })

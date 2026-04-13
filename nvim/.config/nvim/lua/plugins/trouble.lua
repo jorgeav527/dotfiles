@@ -1,31 +1,27 @@
--- TITLE : trouble.nvim
--- ABOUT : A pretty diagnostics, references, quickfix and location list viewer for Neovim.
--- LINKS :
---   > github : https://github.com/folke/trouble.nvim
-
+-- lua/plugins/trouble.lua
 return {
 	"folke/trouble.nvim",
-	opts = {}, -- for default options, refer to the configuration section for custom setup.
+	opts = {},
 	cmd = "Trouble",
 	lazy = true,
 	keys = {
 		{
-			"<leader>lxx",
+			"<leader>xw",
 			"<cmd>Trouble diagnostics toggle<cr>",
 			desc = "󱖫 Workspace Diagnostics (Trouble)",
 		},
 		{
-			"<leader>lxb",
+			"<leader>xb",
 			"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
 			desc = "󱖫 Buffer Diagnostics (Trouble)",
 		},
 		{
-			"<leader>lss",
+			"<leader>xs",
 			"<cmd>Trouble symbols toggle focus=false<cr>",
 			desc = "󱖫 Symbols List (Trouble)",
 		},
 		{
-			"<leader>ll",
+			"<leader>xr",
 			"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
 			desc = "󱖫 Definitions/References (Trouble)",
 		},

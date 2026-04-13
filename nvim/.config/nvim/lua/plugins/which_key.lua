@@ -36,12 +36,11 @@ return {
 			{ "<leader>f", group = "🔍 Search (FZF)", mode = { "n", "v" } },
 			{ "<leader>e", group = "󰙅 Explorer", mode = { "n", "v" } },
 			{ "<leader>g", group = "󰊢 Git", mode = { "n", "v" } },
-			{ "<leader>gt", group = "󰊢 Git Toggles", mode = { "n", "v" } },
 			{ "<leader>l", group = "🅻 LSP", mode = { "n", "v" } },
 			{ "<leader>la", group = "🅻 Code Action", mode = { "n", "v" } },
-			{ "<leader>ld", group = "🅻 Diagnostics", mode = { "n", "v" } },
-			{ "<leader>lx", group = "󱖫 Trouble", mode = { "n", "v" } },
-			{ "<leader>d", group = "󰃤 Debug (DAP)", mode = { "n", "v" } },
+			{ "<leader>ld", group = "🅻 Diagnostics (Native)" },
+			{ "<leader>x", group = "󱖫 Trouble", mode = { "n", "v" } }, -- The new 't' group
+			{ "<leader>d", group = "󰃤 Debug (DAP)" },
 			{ "<leader>h", group = "󰊢 Git Hunks", mode = { "n", "v" } }, -- For backward compatibility if needed, but we used <leader>gs
 		},
 	},

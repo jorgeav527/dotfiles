@@ -45,10 +45,33 @@ return {
 			},
 		},
 	},
-
 	{ "echasnovski/mini.surround", version = "*", opts = {} },
 	{ "echasnovski/mini.cursorword", version = "*", opts = {} },
-	{ "echasnovski/mini.indentscope", version = "*", opts = {} },
+	{
+		"echasnovski/mini.indentscope",
+		version = "*",
+		opts = {},
+		config = function(_, opts)
+			require("mini.indentscope").setup(opts)
+
+			-- Create an autocommand to disable it for specific filetypes
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = {
+					"neo-tree",
+					"lazy",
+					"mason",
+					"help",
+					"checkhealth",
+					"tutor",
+					"trouble",
+					"qf",
+				},
+				callback = function()
+					vim.b.miniindentscope_disable = true
+				end,
+			})
+		end,
+	},
 	{ "echasnovski/mini.pairs", version = "*", opts = {} },
 	{ "echasnovski/mini.trailspace", version = "*", opts = {} },
 	{ "echasnovski/mini.bufremove", version = "*", opts = {} },
