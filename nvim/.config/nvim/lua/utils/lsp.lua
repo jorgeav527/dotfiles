@@ -6,46 +6,45 @@ M.on_attach = function(event)
 		return
 	end
 	local bufnr = event.buf
-	local keymap = vim.keymap.set
-	local opts = {
-		noremap = true, -- prevent recursive mapping
-		silent = true, -- don't print the command to the cli
-		buffer = bufnr, -- restrict the keymap to the local buffer number
-	}
 
-	-- native neovim keymaps
-	keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition", buffer = bufnr })
-	keymap("n", "gD", "<cmd>Lspsaga goto_definition<CR>", { desc = "Goto Definition", buffer = bufnr })
-	keymap(
-		"n",
-		"<leader>ls",
-		"<cmd>vsplit | Lspsaga goto_definition<CR>",
-		{ desc = "Goto Definition (Split)", buffer = bufnr }
-	)
-	keymap("n", "<leader>la", "<cmd>Lspsaga code_action<CR>", { desc = "Code Action", buffer = bufnr })
-	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>", { desc = "Rename Symbol", buffer = bufnr })
-	keymap("n", "<leader>ld", "<cmd>Lspsaga show_line_diagnostics<CR>", { desc = "Line Diagnostics", buffer = bufnr })
-	keymap(
-		"n",
-		"<leader>lD",
-		"<cmd>Lspsaga show_cursor_diagnostics<CR>",
-		{ desc = "Cursor Diagnostics", buffer = bufnr }
-	)
-	keymap("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { desc = "Prev Diagnostic", buffer = bufnr })
-	keymap("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "Next Diagnostic", buffer = bufnr })
-	keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", { desc = "Hover Documentation", buffer = bufnr })
+	local function map(mode, lhs, rhs, opts)
+		if type(opts) == "string" then
+			opts = { desc = opts }
+		end
+		opts = opts or {}
+		opts.buffer = bufnr
+		opts.silent = opts.silent ~= false
+		vim.keymap.set(mode, lhs, rhs, opts)
+	end
 
-	-- fzf-lua keymaps (LSP)
-	keymap("n", "<leader>lf", "<cmd>FzfLua lsp_finder<CR>", { desc = "LSP Finder", buffer = bufnr })
-	keymap("n", "<leader>lR", "<cmd>FzfLua lsp_references<CR>", { desc = "Show References", buffer = bufnr })
-	keymap("n", "<leader>lt", "<cmd>FzfLua lsp_typedefs<CR>", { desc = "Type Definitions", buffer = bufnr })
-	keymap("n", "<leader>lS", "<cmd>FzfLua lsp_document_symbols<CR>", { desc = "Document Symbols", buffer = bufnr })
-	keymap("n", "<leader>lw", "<cmd>FzfLua lsp_workspace_symbols<CR>", { desc = "Workspace Symbols", buffer = bufnr })
-	keymap("n", "<leader>li", "<cmd>FzfLua lsp_implementations<CR>", { desc = "Implementations", buffer = bufnr })
+	local fzf = require("fzf-lua")
+
+	-- LSP Navigation (using fzf-lua)
+	map("n", "gd", fzf.lsp_definitions, "󰈔 Goto Definition")
+	map("n", "gr", fzf.lsp_references, "󰬲 Goto References")
+	map("n", "gI", fzf.lsp_implementations, "󰬄 Goto Implementation")
+	map("n", "gD", vim.lsp.buf.declaration, "󰬀 Goto Declaration")
+	map("n", "K", vim.lsp.buf.hover, "󱙼 Hover Documentation")
+	map("n", "gs", fzf.lsp_document_symbols, "Document Symbols")
+	map("n", "gS", fzf.lsp_live_workspace_symbols, "Workspace Symbols")
+	map("n", "gJ", fzf.lsp_typedefs, "Type Definition")
+
+	-- Code Actions & Rename (under <leader>c)
+	map("n", "<leader>cr", vim.lsp.buf.rename, "󰑕 Rename Symbol")
+	map("n", "<leader>ca", vim.lsp.buf.code_action, "󰅨 Code Action")
+	map("n", "<leader>cd", vim.diagnostic.open_float, "󰈻 Line Diagnostics")
+
+	-- Diagnostics Navigation (Native)
+	map("n", "[d", function()
+		vim.diagnostic.jump({ count = -1, float = true })
+	end, "Prev Diagnostic")
+	map("n", "]d", function()
+		vim.diagnostic.jump({ count = 1, float = true })
+	end, "Next Diagnostic")
 
 	-- Order Imports (if supported by the client LSP)
 	if client:supports_method("textDocument/codeAction", bufnr) then
-		keymap("n", "<leader>lo", function()
+		map("n", "<leader>co", function()
 			vim.lsp.buf.code_action({
 				context = {
 					only = { "source.organizeImports" },
@@ -58,18 +57,18 @@ M.on_attach = function(event)
 			vim.defer_fn(function()
 				vim.lsp.buf.format({ bufnr = bufnr })
 			end, 50) -- slight delay to allow for the import order to go first
-		end, { desc = "Organize Imports", buffer = bufnr })
+		end, "Organize Imports")
 	end
 
 	-- === DAP keymaps ===
 	if client.name == "rust-analyzer" then -- debugging only configured for Rust
 		local dap = require("dap")
-		keymap("n", "<leader>dc", dap.continue, { desc = "DAP Continue", buffer = bufnr })
-		keymap("n", "<leader>do", dap.step_over, { desc = "DAP Step Over", buffer = bufnr })
-		keymap("n", "<leader>di", dap.step_into, { desc = "DAP Step Into", buffer = bufnr })
-		keymap("n", "<leader>du", dap.step_out, { desc = "DAP Step Out", buffer = bufnr })
-		keymap("n", "<leader>db", dap.toggle_breakpoint, { desc = "DAP Toggle Breakpoint", buffer = bufnr })
-		keymap("n", "<leader>dr", dap.repl.open, { desc = "DAP REPL Open", buffer = bufnr })
+		map("n", "<leader>dc", dap.continue, "DAP Continue")
+		map("n", "<leader>do", dap.step_over, "DAP Step Over")
+		map("n", "<leader>di", dap.step_into, "DAP Step Into")
+		map("n", "<leader>du", dap.step_out, "DAP Step Out")
+		map("n", "<leader>db", dap.toggle_breakpoint, "DAP Toggle Breakpoint")
+		map("n", "<leader>dr", dap.repl.open, "DAP REPL Open")
 	end
 end
 

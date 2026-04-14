@@ -4,4 +4,7 @@
 
 return {
 	"tpope/vim-fugitive",
+	keys = {
+		{ "<leader>hg", "<cmd>Git<cr>", desc = "󰊢 Git Status (Fugitive)" },
+	},
 }

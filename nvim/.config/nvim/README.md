@@ -10,7 +10,7 @@ A highly modular, blazing-fast Neovim configuration tailored for Full-Stack Web 
 - **Linting & Formatting:** Integrated via `efm-langserver` for consistent code style across 20+ languages.
 - **AI-Powered Coding:** `Codeium` integration for intelligent autocompletions.
 - **Fast Picker:** `fzf-lua` for instantaneous file searching, grepping, and symbol navigation.
-- **Rich UI:** `Lspsaga` for beautiful hover docs, renames, and diagnostics; `lualine` for a clean status bar.
+- **Rich UI:** `lualine` for a clean status bar.
 - **Advanced Rust Support:** Deep integration with `rustaceanvim` for cargo tasks and debugging.
 - **File Management:** `neo-tree` for intuitive project navigation.
 - **Distraction-Free:** `zen-mode` and `twilight` for focused coding sessions.
@@ -80,16 +80,20 @@ The **Leader key** is set to `<Space>`.
 | `<C-s>` | Save File |
 | `<leader>bx` | Close Current Buffer |
 
-### LSP & Navigation (`fzf-lua`)
+### LSP & Navigation
 | Key | Action |
 |-----|--------|
-| `<leader>ff` | Find Files |
-| `<leader>fg` | Live Grep (Search in files) |
-| `<leader>gd` | Peek Definition (Lspsaga) |
-| `<leader>gD` | Go to Definition |
-| `<leader>ca` | Code Actions |
-| `<leader>rn` | Rename Symbol |
+| `gd` | Goto Definition (`fzf-lua`) |
+| `gr` | Goto References (`fzf-lua`) |
+| `gI` | Goto Implementation (`fzf-lua`) |
+| `gD` | Goto Declaration |
 | `K` | Hover Documentation |
+| `gs` | Document Symbols (`fzf-lua`) |
+| `gS` | Workspace Symbols (`fzf-lua`) |
+| `<leader>ca` | Code Action |
+| `<leader>cr` | Rename Symbol |
+| `<leader>cd` | Line Diagnostics |
+| `[d` / `]d` | Prev/Next Diagnostic |
 
 ## 🎥 Original Tutorials
 

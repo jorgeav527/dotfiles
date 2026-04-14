@@ -21,7 +21,7 @@ This workspace contains a highly modular Neovim configuration optimized for web 
 - **Picker:** `fzf-lua` for files, grep, and LSP symbols.
 - **File Explorer:** `neo-tree`.
 - **AI:** `codeium.nvim`.
-- **UI:** `Lspsaga` for enhanced LSP UI, `lualine.nvim` for statusline, `gruvbox` theme.
+- **UI:** `lualine.nvim` for statusline, `gruvbox` theme.
 - **Rust Integration:** `rustaceanvim` for a superior Rust development experience.
 
 ## Building & Running

@@ -1,6 +1,13 @@
--- github : https://github.com/l
+-- ================================================================================================
+-- TITLE : gitsigns.nvim
+-- ABOUT : Git integration for buffers (signs, hunks, etc.)
+-- LINKS :
+--   > github : https://github.com/lewis6991/gitsigns.nvim
+-- ================================================================================================
+
 return {
 	"lewis6991/gitsigns.nvim",
+	event = { "BufReadPre", "BufNewFile" },
 	opts = {
 		on_attach = function(bufnr)
 			local gitsigns = require("gitsigns")
@@ -15,32 +22,29 @@ return {
 			end
 
 			-- Actions
-			map("n", "<leader>gs", gitsigns.stage_hunk, "󰊢 Stage Hunk")
-			map("n", "<leader>gr", gitsigns.reset_hunk, "󰊢 Reset Hunk")
-			map("v", "<leader>gs", function()
+			map("n", "<leader>hs", gitsigns.stage_hunk, "󰊢 Stage Hunk")
+			map("n", "<leader>hr", gitsigns.reset_hunk, "󰊢 Reset Hunk")
+			map("v", "<leader>hs", function()
 				gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, "󰊢 Stage Selection")
-			map("v", "<leader>gr", function()
+			map("v", "<leader>hr", function()
 				gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, "󰊢 Reset Selection")
-			map("n", "<leader>gS", gitsigns.stage_buffer, "󰊢 Stage Buffer")
-			map("n", "<leader>gR", gitsigns.reset_buffer, "󰊢 Reset Buffer")
-			map("n", "<leader>gu", gitsigns.undo_stage_hunk, "󰊢 Undo Stage Hunk")
-			map("n", "<leader>gp", gitsigns.preview_hunk, "󰊢 Preview Hunk")
-			map("n", "<leader>gb", function()
+			map("n", "<leader>hS", gitsigns.stage_buffer, "󰊢 Stage Buffer")
+			map("n", "<leader>hR", gitsigns.reset_buffer, "󰊢 Reset Buffer")
+			map("n", "<leader>hu", gitsigns.undo_stage_hunk, "󰊢 Undo Stage Hunk")
+			map("n", "<leader>hp", gitsigns.preview_hunk, "󰊢 Preview Hunk")
+			map("n", "<leader>hb", function()
 				gitsigns.blame_line({ full = true })
 			end, "󰊢 Blame Line")
-			map("n", "<leader>gd", gitsigns.diffthis, "󰊢 Diff Against Index")
-			map("n", "<leader>gD", function()
+			map("n", "<leader>hd", gitsigns.diffthis, "󰊢 Diff Against Index")
+			map("n", "<leader>hD", function()
 				gitsigns.diffthis("~")
 			end, "󰊢 Diff Against Last Commit")
 
 			-- Toggles
-			map("n", "<leader>gt", gitsigns.toggle_current_line_blame, "󰊢 Toggle Blame Line")
-			map("n", "<leader>gx", gitsigns.toggle_deleted, "󰊢 Toggle Deleted")
-
-			-- Fugitive
-			map("n", "<leader>gg", "<cmd>Git<cr>", "󰊢 Git Status (Fugitive)")
+			map("n", "<leader>ht", gitsigns.toggle_current_line_blame, "󰊢 Toggle Blame Line")
+			map("n", "<leader>hx", gitsigns.toggle_deleted, "󰊢 Toggle Deleted")
 
 			-- Text object
 			map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "󰊢 Select Hunk")
