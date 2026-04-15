@@ -31,22 +31,21 @@ return {
 			"vimdoc",
 		}
 
-		local configs = require("nvim-treesitter")
+		local configs = require("nvim-treesitter.configs")
 		configs.setup({
 			ensure_installed = languages,
 			highlight = { enable = true },
 			indent = { enable = true },
-			-- 1. Incremental Selection (Your previous <CR> maps)
 			incremental_selection = {
 				enable = true,
 				keymaps = {
-					init_selection = "<CR>",
-					node_incremental = "<CR>",
-					scope_incremental = "<c-s>",
-					node_decremental = "<BS>",
+					init_selection = "gnn",
+					node_incremental = "grn",
+					scope_incremental = "grc",
+					node_decremental = "grm",
 				},
 			},
-			-- 2. Textobjects (The "Select", "Move", and "Swap" logic)
+			auto_install = true,
 			textobjects = {
 				select = {
 					enable = true,

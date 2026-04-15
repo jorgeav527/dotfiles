@@ -20,11 +20,9 @@ require("config.options")
 require("config.keymaps")
 require("config.autocmds")
 
-local plugins_dir = "plugins"
-
 require("lazy").setup({
 	spec = {
-		{ import = plugins_dir },
+		{ import = "plugins" },
 	},
 	rtp = {
 		disabled_plugins = {},
@@ -33,7 +31,5 @@ require("lazy").setup({
 		colorscheme = { "gruvbox" },
 	},
 	checker = { enabled = true, notify = false },
-	change_detection = {
-		notify = false,
-	},
+	change_detection = { notify = false },
 })
