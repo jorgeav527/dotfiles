@@ -99,18 +99,25 @@ vim.keymap.set("n", "<leader><leader>", "<cmd>FzfLua files<cr>", { desc = "Find 
 vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
 
 -- Treesitter
-vim.cmd("syntax off") -- Make it obvious if treesitter is missing
-vim.api.nvim_create_autocmd("FileType", {
-	callback = function()
-		pcall(vim.treesitter.start)
-	end,
+vim.cmd('syntax off') -- Make it obvious if treesitter is missing
+vim.api.nvim_create_autocmd('FileType', {
+	callback = function() pcall(vim.treesitter.start) end,
 })
 
 -- LSP
 vim.lsp.enable({
-	"ty",            -- also $ uv tool install ty@latest
-	"ruff",          -- also $ uv tool install ruff@latest
-	"lua_ls",        -- also $ brew install lua-language-server
+	-- Debian 12
+	"ty", -- also $ uv tool install ty@latest
+	"ruff", -- also $ uv tool install ruff@latest
+	-- # Create a permanent home for the server
+	-- mkdir -p ~/.local/share/lua-ls
+	-- cd ~/.local/share/lua-ls
+	-- # Download the specific file you identified
+	-- curl -L -O https://github.com/LuaLS/lua-language-server/releases/download/3.18.2/lua-language-server-3.18.2-linux-x64.tar.gz
+	-- # Unpack it
+	-- tar -xzf lua-language-server-3.18.2-linux-x64.tar.gz
+	-- sudo ln -s ~/.local/share/lua-ls/bin/lua-language-server /usr/local/bin/lua-language-server
+	"lua_ls",
 })
 vim.o.signcolumn = "yes" -- make lsp warnings not widen the gutter
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
@@ -133,6 +140,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 	end,
 })
+
+
 -- Blink.cmp
 require("blink.cmp").setup({})
 
@@ -193,7 +202,7 @@ vim.keymap.set("n", "<leader>dr", dap.restart_frame, { desc = "Debug: Restart (U
 -- Otree
 require("Otree").setup({
 	git_signs = true,
-    	lsp_signs = true,
+	lsp_signs = true,
 	use_default_keymaps = false,
 	keymaps = {
 		["<CR>"] = "actions.select",
