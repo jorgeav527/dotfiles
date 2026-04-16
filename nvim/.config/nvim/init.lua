@@ -33,10 +33,10 @@ vim.diagnostic.config({
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show diagnostics" })
 
 -- Easily move between windows
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+vim.keymap.set("n", "<C-Left>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+vim.keymap.set("n", "<C-Right>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+-- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+-- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- Highlight yanks
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -54,6 +54,7 @@ vim.pack.add({
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/karb94/neoscroll.nvim",
 	"https://github.com/mfussenegger/nvim-dap",
+	"https://github.com/Eutrius/Otree.nvim",
 	"https://github.com/stevearc/oil.nvim",
 	"https://github.com/nvim-mini/mini.nvim",
 	"https://github.com/kdheepak/lazygit.nvim",
@@ -174,19 +175,51 @@ dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug
 		end,
 	},
 }
-vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint, { desc = "Debug toggle breakpoint" })
+vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug toggle breakpoint" })
 vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Debug continue" })
 vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Debug terminate" })
-vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "Debug open REPL" })
-vim.keymap.set("n", "<leader>dl", dap.run_last, { desc = "Debug run last" })
+vim.keymap.set("n", "<leader>dR", dap.repl.open, { desc = "Debug open REPL" })
+vim.keymap.set("n", "<leader>dL", dap.run_last, { desc = "Debug run last" })
 vim.keymap.set({ "n", "v" }, "<leader>dh", require("dap.ui.widgets").hover, { desc = "Debug hover" })
 vim.keymap.set("n", "<leader>ds", function()
 	require("dap.ui.widgets").centered_float(require("dap.ui.widgets").scopes)
 end, { desc = "Debug scopes" })
-vim.keymap.set("n", "<Down>", dap.step_over, { desc = "Debug step over" })
-vim.keymap.set("n", "<Right>", dap.step_into, { desc = "Debug step into" })
-vim.keymap.set("n", "<Left>", dap.step_out, { desc = "Debug step out" })
-vim.keymap.set("n", "<Up>", dap.restart_frame, { desc = "Debug restart frame" })
+
+vim.keymap.set("n", "<leader>dl", dap.step_over, { desc = "Debug: Step Over (Down)" })
+vim.keymap.set("n", "<leader>dj", dap.step_into, { desc = "Debug: Step Into (Right)" })
+vim.keymap.set("n", "<leader>dk", dap.step_out, { desc = "Debug: Step Out (Left)" })
+vim.keymap.set("n", "<leader>dr", dap.restart_frame, { desc = "Debug: Restart (Up)" })
+
+-- Otree
+require("Otree").setup({
+	git_signs = true,
+    	lsp_signs = true,
+	use_default_keymaps = false,
+	keymaps = {
+		["<CR>"] = "actions.select",
+		["l"] = "actions.select",
+		["c"] = "actions.close_dir",
+		["<Esc>"] = "actions.close_win",
+		["p"] = "actions.goto_parent",
+		["gd"] = "actions.goto_dir",
+		["gD"] = "actions.goto_home_dir",
+		["cd"] = "actions.change_home_dir",
+		["L"] = "actions.open_dirs",
+		["C"] = "actions.close_dirs",
+		["o"] = "actions.oil_dir",
+		["O"] = "actions.oil_into_dir",
+		["t"] = "actions.open_tab",
+		["v"] = "actions.open_vsplit",
+		["h"] = "actions.open_split",
+		["."] = "actions.toggle_hidden",
+		["i"] = "actions.toggle_ignore",
+		["r"] = "actions.refresh",
+		["f"] = "actions.focus_file",
+		["?"] = "actions.open_help",
+	},
+})
+
+vim.keymap.set("n", "<leader>e", "<cmd>Otree<cr>", { desc = "Toggle Otree" })
 
 -- Oil.nvim
 require("oil").setup({

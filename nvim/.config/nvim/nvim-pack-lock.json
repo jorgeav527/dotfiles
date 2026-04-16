@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "Otree.nvim": {
+      "rev": "1540ea0a300916f1c43063fda185463b3e8f2f40",
+      "src": "https://github.com/Eutrius/Otree.nvim"
+    },
     "alpha-nvim": {
       "rev": "7563da4a861ee6b3ed674d0ee5c5c0bd19383a38",
       "src": "https://github.com/goolord/alpha-nvim"
