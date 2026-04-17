@@ -17,6 +17,10 @@
       "rev": "832f1ecc5f8b15a44cf7537e31d3266d657775b1",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
+    "friendly-snippets": {
+      "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
+      "src": "https://github.com/rafamadriz/friendly-snippets"
+    },
     "fzf-lua": {
       "rev": "5bf93b12f70c7cc89a2cc6ee026b82f111815be8",
       "src": "https://github.com/ibhagwan/fzf-lua"
