@@ -4,20 +4,75 @@ vim.g.maplocalleader = " "
 
 -- Relative line numbers
 vim.o.relativenumber = true
-vim.o.number = true      -- display absolute line number instead of 0
-vim.opt.swapfile = false -- No more .swp files
-vim.opt.backup = false   -- No backup files
-vim.opt.undofile = true  -- Keep undo history even after closing
+vim.o.number = true         -- display absolute line number instead of 0
+vim.opt.swapfile = false    -- No more .swp files
+vim.opt.backup = false      -- No backup files
+vim.opt.undofile = true     -- Keep undo history even after closing
+vim.opt.signcolumn = "yes"  -- Always show sign column
+vim.opt.colorcolumn = "120" -- Show column at 100 characters
+vim.opt.laststatus = 3      -- Force the statusline to use a single bar at the bottom
+
 
 -- Case-insensitive searching unless we use capital letters
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.opt.iskeyword:append("-")
 
 -- Global Indentation (2 spaces)
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = true
 vim.o.softtabstop = 2
+
+-- Basic movement
+vim.keymap.set("n", "j", function()
+  return vim.v.count == 0 and "gj" or "j"
+end, { expr = true, silent = true, desc = "Down (wrap-aware)" })
+vim.keymap.set("n", "k", function()
+  return vim.v.count == 0 and "gk" or "k"
+end, { expr = true, silent = true, desc = "Up (wrap-aware)" })
+
+-- Deleting (no yank)
+vim.keymap.set("n", "x", '"_x', { desc = "Delete char (no yank)" })
+vim.keymap.set("v", "d", '"_d', { desc = "Delete selection (no yank)" })
+vim.keymap.set("v", "x", '"_x', { desc = "Delete selection (no yank)" })
+vim.keymap.set("v", "p", '"_dP', { desc = "Paste (no yank)" })
+
+-- [B]uffer Management
+vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete!<CR>", { desc = "Delete current buffer" })
+vim.keymap.set("n", "<leader>bc", "<cmd>enew<CR>", { desc = "Create new buffer" })
+vim.keymap.set("n", "<leader>bq", "<cmd>bdelete!<CR>", { desc = "Close current buffer" })
+vim.keymap.set("n", "<leader>bQ", "<cmd>%bd|e#|bd#<CR>", { desc = "Close all other buffers" })
+vim.keymap.set("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+
+-- Copy Paths
+vim.keymap.set("n", "<leader>ba", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  vim.notify("Copied absolute path: " .. path)
+end, { desc = "Copy Absolute Path" })
+
+vim.keymap.set("n", "<leader>br", function()
+  local fullpath = vim.fn.expand("%:p")
+  local cwd = vim.fn.getcwd()
+  cwd = cwd:gsub("([%-%.%+%[%]%(%)%$%^%%%?%*])", "%%%1")
+  local relative = fullpath:gsub("^" .. cwd .. "/", "")
+  vim.fn.setreg("+", relative)
+  vim.notify("Copied relative path: " .. relative)
+end, { desc = "Copy Relative Path" })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.opt.formatoptions:remove({ "c", "r", "o" })
+  end,
+  desc = "Stop Neovim from automatically starting a new comment line",
+})
+
+vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Clear search highlights" })
 
 -- Sync vim and system clipboards
 vim.schedule(function()
@@ -69,6 +124,7 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.nvim",
   "https://github.com/esmuellert/codediff.nvim",
   "https://github.com/goolord/alpha-nvim",
+  "https://github.com/nvim-lualine/lualine.nvim",
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/rafamadriz/friendly-snippets",
   { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") }, -- pinning so rust binary dependency automatically downloads
@@ -113,6 +169,90 @@ require('mini.diff').setup({
     goto_last  = ']H',
   },
 })
+require('mini.move').setup({
+  reindent_linewise = true,
+  mappings = {
+    -- Move visual selection
+    left = "<A-Left>",
+    right = "<A-Right>",
+    down = "<A-Down>",
+    up = "<A-Up>",
+
+    -- Move current line
+    line_left = "<A-Left>",
+    line_right = "<A-Right>",
+    line_down = "<A-Down>",
+    line_up = "<A-Up>",
+  },
+})
+require("mini.pairs").setup({})
+require("mini.trailspace").setup({})
+require("mini.surround").setup({})
+require("mini.trailspace").setup({})
+
+-- Statusline
+require('lualine').setup({
+  options = {
+    icons_enabled = true,
+    theme = 'auto', -- Matches your Base2Tone Forest colors
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
+    disabled_filetypes = {
+      statusline = { 'Otree', 'alpha', 'lazy' },
+      winbar = { 'Otree' },
+    },
+    always_divide_middle = true,
+    globalstatus = true, -- One bar at the bottom, even with splits
+  },
+  sections = {
+    -- Left side
+    lualine_a = {
+      {
+        'mode',
+        fmt = function(str) return ' ' .. str end
+      }
+    },
+    lualine_b = { 'branch' }, -- Shows your Git branch here
+    lualine_c = {
+      {
+        'filename',
+        file_status = true,
+        path = 1 -- 1 = Relative path (e.g. .config/nvim/init.lua)
+      }
+    },
+
+    -- Right side
+    lualine_x = {
+      {
+        'diagnostics',
+        sources = { 'nvim_diagnostic' },
+        symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
+        colored = false,
+      },
+      {
+        'diff',
+        colored = false,
+        symbols = { added = ' ', modified = ' ', removed = ' ' },
+      },
+      'encoding',
+      'filetype'
+    },
+    lualine_y = { 'location' }, -- Horizontal | Vertical position
+    lualine_z = { 'progress' },
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { { 'filename', path = 1 } },
+    lualine_x = { { 'location', padding = 0 } },
+    lualine_y = {},
+    lualine_z = {},
+  },
+})
+
+vim.opt.showmode = false
+-- Optional: Hide the default "-- INSERT --" since the statusline shows it
+vim.opt.showmode = false
 
 vim.keymap.set("n", "<leader>gt", function()
   require("mini.diff").toggle_overlay(0)
@@ -133,8 +273,10 @@ require("fzf-lua").setup({
   },
 })
 
-vim.keymap.set("n", "<leader><leader>", "<cmd>FzfLua files<cr>", { desc = "Find files" })
 vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
+vim.keymap.set("n", "<leader><Tab>", "<cmd>FzfLua files<cr>", { desc = "Find files" })
+vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
+vim.keymap.set("n", "<leader>fb", "<cmd>FzfLua buffers<cr>", { desc = "Find buffers" })
 
 -- Treesitter
 vim.cmd('syntax off') -- Make it obvious if treesitter is missing
