@@ -4,7 +4,10 @@ vim.g.maplocalleader = " "
 
 -- Relative line numbers
 vim.o.relativenumber = true
-vim.o.number = true -- display absolute line number instead of 0
+vim.o.number = true      -- display absolute line number instead of 0
+vim.opt.swapfile = false -- No more .swp files
+vim.opt.backup = false   -- No backup files
+vim.opt.undofile = true  -- Keep undo history even after closing
 
 -- Case-insensitive searching unless we use capital letters
 vim.o.ignorecase = true
@@ -26,7 +29,7 @@ vim.diagnostic.config({
 	severity_sort = true,    -- show most severe error first
 	update_in_insert = false, -- don't update while typing
 	float = { source = "if_many" }, -- nicer look for floats and show source if multiple sources (ex. ruff and ty)
-	jump = { float = true }, -- automatically open the diagnostic float if you jump with [d ]d
+	on_jump = { float = true }, -- automatically open the diagnostic float if you jump with [d ]d
 })
 
 -- Show diagnostics
@@ -49,6 +52,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- Plugins
 -- Pack guide: https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack#update
 vim.pack.add({
+	"https://github.com/ellisonleao/gruvbox.nvim",
 	"https://github.com/ibhagwan/fzf-lua",
 	"https://github.com/nvim-treesitter/nvim-treesitter", -- also $ brew install tree-sitter-cli
 	"https://github.com/neovim/nvim-lspconfig",
@@ -57,30 +61,54 @@ vim.pack.add({
 	"https://github.com/Eutrius/Otree.nvim",
 	"https://github.com/stevearc/oil.nvim",
 	"https://github.com/nvim-mini/mini.nvim",
-	"https://github.com/kdheepak/lazygit.nvim",
 	"https://github.com/esmuellert/codediff.nvim",
 	"https://github.com/goolord/alpha-nvim",
-	"https://github.com/rebelot/kanagawa.nvim",
 	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
 	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") }, -- pinning so rust binary dependency automatically downloads
 })
 
+-- Grubox
+require("gruvbox").setup({
+	terminal_colors = true,
+	undercurl = true,
+	underline = true,
+	bold = true,
+	italic = {
+		strings = true,
+		emphasis = true,
+		comments = true,
+		operators = false,
+		folds = true,
+	},
+	strikethrough = true,
+	invert_selection = false,
+	invert_signs = false,
+	invert_tabline = false,
+	invert_intend_guides = false,
+	inverse = true,
+	contrast = "soft", -- can be "hard", "soft" or empty string
+	transparent_mode = false,
+})
+vim.cmd("colorscheme gruvbox")
+
 -- Mini
 require('mini.icons').mock_nvim_web_devicons()
-
--- Kanagawa
-require("kanagawa").setup({
-	colors = {
-		theme = {
-			all = {
-				ui = {
-					bg_gutter = "none",
-				},
-			},
-		},
+require('mini.diff').setup({
+	view = {
+		style = 'sign',
+	},
+	mappings = {
+		-- Navigation through your changes
+		goto_first = '[H',
+		goto_prev  = '[h',
+		goto_next  = ']h',
+		goto_last  = ']H',
 	},
 })
-vim.cmd("colorscheme kanagawa-wave") -- need to call after setup
+-- The Toggle Overlay mapping (the <leader>go part)
+vim.keymap.set("n", "<leader>go", function()
+	require("mini.diff").toggle_overlay(0)
+end, { desc = "Toggle mini.diff overlay" })
 
 -- Markdown
 require("render-markdown").setup({})
@@ -120,27 +148,66 @@ vim.lsp.enable({
 	"lua_ls",
 })
 vim.o.signcolumn = "yes" -- make lsp warnings not widen the gutter
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
--- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
 vim.api.nvim_create_autocmd("LspAttach", {
-	group = vim.api.nvim_create_augroup("my.lsp", { clear = true }),
+	group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 	callback = function(ev)
 		local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-		if
-		    not client:supports_method("textDocument/willSaveWaitUntil")
-		    and client:supports_method("textDocument/formatting")
-		then
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				group = vim.api.nvim_create_augroup("my.lsp.fmt", { clear = false }),
-				buffer = ev.buf,
-				callback = function()
-					vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
-				end,
-			})
+		local bufnr = ev.buf
+		local filetype = vim.bo[bufnr].filetype
+
+		-----------------------------------------
+		-- 1. LUA SPECIFIC CONFIG
+		-----------------------------------------
+		if filetype == "lua" then
+			-- Logic:
+			-- A) Is this the lua_ls client?
+			-- B) Does it know how to format?
+			-- C) Does it NOT handle its own formatting on save?
+			if client.name == "lua_ls"
+			    and client:supports_method("textDocument/formatting")
+			    and not client:supports_method("textDocument/willSaveWaitUntil")
+			then
+				vim.api.nvim_create_autocmd("BufWritePre", {
+					group = vim.api.nvim_create_augroup("LspFormatLua." .. bufnr, { clear = true }),
+					buffer = bufnr,
+					callback = function()
+						vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+					end,
+				})
+			end
+		end
+
+		-----------------------------------------
+		-- 2. PYTHON: ruff (Format + Imports)
+		-----------------------------------------
+		if filetype == "python" then
+			-- We only attach the Save trigger to Ruff, not 'ty'
+			if client.name == "ruff"
+			    and client:supports_method("textDocument/formatting")
+			    and not client:supports_method("textDocument/willSaveWaitUntil")
+			then
+				vim.api.nvim_create_autocmd("BufWritePre", {
+					group = vim.api.nvim_create_augroup("LspFormatPython." .. bufnr, { clear = true }),
+					buffer = bufnr,
+					callback = function()
+						-- Organize Imports first
+						vim.lsp.buf.code_action({
+							context = { only = { "source.organizeImports.ruff" } },
+							apply = true,
+						})
+
+						-- Then Format
+						vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+
+						-- Visible confirmation (optional)
+						vim.api.nvim_echo({ { "Ruff: Imports sorted & Formatted", "None" } },
+							false, {})
+					end,
+				})
+			end
 		end
 	end,
 })
-
 
 -- Blink.cmp
 require("blink.cmp").setup({})
@@ -201,6 +268,8 @@ vim.keymap.set("n", "<leader>dr", dap.restart_frame, { desc = "Debug: Restart (U
 
 -- Otree
 require("Otree").setup({
+	show_hidden = true,
+	show_ignore = true,
 	git_signs = true,
 	lsp_signs = true,
 	use_default_keymaps = false,
@@ -237,9 +306,6 @@ require("oil").setup({
 	},
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
--- Lazygit.nvim
-vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "Lazygit" })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
