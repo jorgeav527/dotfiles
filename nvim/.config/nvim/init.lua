@@ -143,6 +143,27 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- LSP
+-- 1. Configure vtsls to work with Vue
+vim.lsp.config('vtsls', {
+  filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vue' },
+  settings = {
+    vtsls = {
+      tsserver = {
+        globalPlugins = {
+          {
+            name = '@vue/typescript-plugin',
+            -- Updated path based on your 'npm list -g' output
+            location = '/home/jorgeav527/.nvm/versions/node/v22.19.0/lib/node_modules/@vue/language-server',
+            languages = { 'vue' },
+            configNamespace = 'typescript',
+            enableForWorkspaceTypeScriptVersions = true,
+          },
+        },
+      },
+    },
+  },
+})
+
 vim.lsp.enable({
   -- Debian 12
   "ty",   -- also $ uv tool install ty@latest
@@ -156,6 +177,17 @@ vim.lsp.enable({
   -- tar -xzf lua-language-server-3.18.2-linux-x64.tar.gz
   -- sudo ln -s ~/.local/share/lua-ls/bin/lua-language-server /usr/local/bin/lua-language-server
   "lua_ls",
+  -- npm install -g vscode-langservers-extracted
+  "html",   -- HTML
+  "cssls",  -- CSS
+  "jsonls", -- JSON
+  -- npm install -g @vue/language-server
+  -- npm install -g @vtsls/language-server
+  -- npm install -g typescript
+  "vue_ls",              -- Vue
+  "vtsls",               -- Modern JS/TS replacement for tsserver
+  -- npm install -g @tailwindcss/language-server
+  "tailwindcss",         -- Tailwindcss
 })
 vim.o.signcolumn = "yes" -- make lsp warnings not widen the gutter
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -212,6 +244,81 @@ vim.api.nvim_create_autocmd("LspAttach", {
             -- Visible confirmation (optional)
             vim.api.nvim_echo({ { "Ruff: Imports sorted & Formatted", "None" } },
               false, {})
+          end,
+        })
+      end
+    end
+
+
+    -----------------------------------------
+    -- 3. HTML & CSS
+    -----------------------------------------
+    if filetype == "html" or filetype == "css" then
+      if (client.name == "html" or client.name == "cssls")
+          and client:supports_method("textDocument/formatting")
+      then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatWeb." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+          end,
+        })
+      end
+    end
+
+    -----------------------------------------
+    -- 4. JAVASCRIPT & TYPESCRIPT (vtsls)
+    -----------------------------------------
+    if filetype == "javascript" or filetype == "typescript" then
+      if client.name == "vtsls"
+          and client:supports_method("textDocument/formatting")
+      then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatJS." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function()
+            -- Organize Imports (similar to your Ruff logic)
+            vim.lsp.buf.execute_command({
+              command = "typescript.organizeImports",
+              arguments = { vim.api.nvim_buf_get_name(bufnr) }
+            })
+            -- Format
+            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+          end,
+        })
+      end
+    end
+
+    -----------------------------------------
+    -- 5. JSON
+    -----------------------------------------
+    if filetype == "json" or filetype == "jsonc" then
+      if client.name == "jsonls"
+          and client:supports_method("textDocument/formatting")
+      then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatJson." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+          end,
+        })
+      end
+    end
+
+    -----------------------------------------
+    -- 6. VUE (Volar)
+    -----------------------------------------
+    if filetype == "vue" then
+      if client.name == "vue_ls"
+          and client:supports_method("textDocument/formatting")
+      then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatVue." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
           end,
         })
       end
