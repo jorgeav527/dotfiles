@@ -10,8 +10,6 @@ vim.opt.backup = false      -- No backup files
 vim.opt.undofile = true     -- Keep undo history even after closing
 vim.opt.signcolumn = "yes"  -- Always show sign column
 vim.opt.colorcolumn = "120" -- Show column at 100 characters
-vim.opt.laststatus = 3      -- Force the statusline to use a single bar at the bottom
-
 
 -- Case-insensitive searching unless we use capital letters
 vim.o.ignorecase = true
@@ -40,6 +38,8 @@ vim.keymap.set("n", "x", '"_x', { desc = "Delete char (no yank)" })
 vim.keymap.set("v", "d", '"_d', { desc = "Delete selection (no yank)" })
 vim.keymap.set("v", "x", '"_x', { desc = "Delete selection (no yank)" })
 vim.keymap.set("v", "p", '"_dP', { desc = "Paste (no yank)" })
+vim.keymap.set("n", "c", '"_c', { desc = "Change (no yank)" })
+vim.keymap.set("v", "c", '"_c', { desc = "Change (no yank)" })
 
 -- [B]uffer Management
 vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
@@ -100,8 +100,8 @@ vim.diagnostic.config({
 })
 
 -- Show diagnostics
-vim.keymap.set("n", "<leader>lt", vim.diagnostic.open_float, { desc = "Show diagnostics" })
-vim.keymap.set("n", "<leader>ld", vim.diagnostic.setqflist, { desc = "Open Project Diagnostic List" })
+vim.keymap.set("n", "<leader>dt", vim.diagnostic.open_float, { desc = "Show diagnostics" })
+vim.keymap.set("n", "<leader>dq", vim.diagnostic.setqflist, { desc = "Open Project Diagnostic List" })
 
 -- Easily move between windows
 vim.keymap.set("n", "<C-Left>", "<C-w><C-h>", { desc = "Move focus to the left window" })
@@ -137,6 +137,9 @@ vim.pack.add({
   { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") }, -- pinning so rust binary dependency automatically downloads
 })
 
+-- Codediff (vscode like diffs :))
+require("codediff").setup({})
+
 -- Grubox
 require("gruvbox").setup({
   terminal_colors = true,
@@ -164,21 +167,29 @@ vim.cmd("colorscheme gruvbox")
 -- Mini
 require('mini.icons').setup({ style = 'glyph' })
 require('mini.icons').mock_nvim_web_devicons()
-require('mini.diff').setup({
-  view = {
-    style = 'sign',
-  },
+require('mini.move').setup({
   mappings = {
-    -- Navigation through your changes
-    line_right = "<A-Right>",
-    line_down = "<A-Down>",
-    line_up = "<A-Up>",
+    left       = '<A-Left>',
+    right      = '<A-Right>',
+    down       = '<A-Down>',
+    up         = '<A-Up>',
+    line_left  = '<A-Left>',
+    line_right = '<A-Right>',
+    line_down  = '<A-Down>',
+    line_up    = '<A-Up>',
+  },
+  options = {
+    reindent_linewise = true,
   },
 })
 require("mini.pairs").setup({})
 require("mini.trailspace").setup({})
-require("mini.surround").setup({})
-require("mini.trailspace").setup({})
+require('mini.surround').setup({})
+require('mini.splitjoin').setup({
+  mappings = {
+    toggle = '<leader>cs', -- [C]ode [S]plit/Join toggle
+  },
+})
 
 -- Statusline
 require('lualine').setup({
@@ -243,9 +254,11 @@ require('lualine').setup({
 -- Optional: Hide the default "-- INSERT --" since the statusline shows it
 vim.opt.showmode = false
 
-vim.keymap.set("n", "<leader>gt", function()
+vim.keymap.set("n", "<leader>ht", function()
   require("mini.diff").toggle_overlay(0)
 end, { desc = "Toggle mini.diff overlay" })
+
+vim.keymap.set("n", "<leader>hd", "<cmd>CodeDiff<CR>", { desc = "Open CodeDiff (VS Code style)" })
 
 require('mini.indentscope').setup({})
 
@@ -510,20 +523,20 @@ dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug
     end,
   },
 }
-vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug toggle breakpoint" })
-vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Debug continue" })
-vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Debug terminate" })
-vim.keymap.set("n", "<leader>dR", dap.repl.open, { desc = "Debug open REPL" })
-vim.keymap.set("n", "<leader>dL", dap.run_last, { desc = "Debug run last" })
+vim.keymap.set("n", "<leader>kb", dap.toggle_breakpoint, { desc = "Debug toggle breakpoint" })
+vim.keymap.set("n", "<leader>kc", dap.continue, { desc = "Debug continue" })
+vim.keymap.set("n", "<leader>kq", dap.terminate, { desc = "Debug terminate" })
+vim.keymap.set("n", "<leader>kR", dap.repl.open, { desc = "Debug open REPL" })
+vim.keymap.set("n", "<leader>kL", dap.run_last, { desc = "Debug run last" })
 vim.keymap.set({ "n", "v" }, "<leader>dh", require("dap.ui.widgets").hover, { desc = "Debug hover" })
-vim.keymap.set("n", "<leader>ds", function()
+vim.keymap.set("n", "<leader>ks", function()
   require("dap.ui.widgets").centered_float(require("dap.ui.widgets").scopes)
 end, { desc = "Debug scopes" })
 
-vim.keymap.set("n", "<leader>dl", dap.step_over, { desc = "Debug: Step Over (Down)" })
-vim.keymap.set("n", "<leader>dj", dap.step_into, { desc = "Debug: Step Into (Right)" })
-vim.keymap.set("n", "<leader>dk", dap.step_out, { desc = "Debug: Step Out (Left)" })
-vim.keymap.set("n", "<leader>dr", dap.restart_frame, { desc = "Debug: Restart (Up)" })
+vim.keymap.set("n", "<leader>kl", dap.step_over, { desc = "Debug: Step Over (Down)" })
+vim.keymap.set("n", "<leader>ks", dap.step_into, { desc = "Debug: Step Into (Right)" })
+vim.keymap.set("n", "<leader>kk", dap.step_out, { desc = "Debug: Step Out (Left)" })
+vim.keymap.set("n", "<leader>kr", dap.restart_frame, { desc = "Debug: Restart (Up)" })
 
 -- Otree
 require("Otree").setup({
@@ -566,5 +579,66 @@ require("oil").setup({
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
--- Codediff (vscode like diffs :))
-require("codediff").setup({})
+
+local miniclue = require('mini.clue')
+miniclue.setup({
+  triggers = {
+    -- Leader triggers (The heart of your config)
+    { mode = 'n', keys = '<Leader>' },
+    { mode = 'x', keys = '<Leader>' },
+
+    -- Built-in completion (blink.cmp)
+    { mode = 'i', keys = '<C-x>' },
+
+    -- `g` key (navigation and mini.diff toggles)
+    { mode = 'n', keys = 'g' },
+    { mode = 'x', keys = 'g' },
+
+    -- Marks and Registers (Standard Vim)
+    { mode = 'n', keys = "'" },
+    { mode = 'n', keys = '`' },
+    { mode = 'x', keys = "'" },
+    { mode = 'x', keys = '`' },
+    { mode = 'n', keys = '"' },
+    { mode = 'x', keys = '"' },
+    { mode = 'i', keys = '<C-r>' },
+    { mode = 'c', keys = '<C-r>' },
+
+    -- Window commands (<C-w> and your Ctrl+Arrows)
+    { mode = 'n', keys = '<C-w>' },
+
+    -- `z` key (centering and folding)
+    { mode = 'n', keys = 'z' },
+    { mode = 'x', keys = 'z' },
+
+    -- Brackets (Standard navigation)
+    { mode = 'n', keys = '[' },
+    { mode = 'n', keys = ']' },
+  },
+
+  clues = {
+    -- Group Labels to match your init.lua sections
+    { mode = 'n', keys = '<leader>b', desc = '+[B]uffers' },
+    { mode = 'n', keys = '<leader>c', desc = '+[C]ode (Surround/Split)' },
+    { mode = 'n', keys = '<leader>k', desc = '+[D]ebug' },
+    { mode = 'n', keys = '<leader>d', desc = '+[L]SP/Diagnostics' },
+    { mode = 'n', keys = '<leader>h', desc = '+[G]it' },
+    { mode = 'n', keys = '<leader>f', desc = '+[F]ind (Fzf)' },
+
+    -- Professional helper clues
+    miniclue.gen_clues.builtin_completion(),
+    miniclue.gen_clues.g(),
+    miniclue.gen_clues.marks(),
+    miniclue.gen_clues.registers(),
+    miniclue.gen_clues.windows(),
+    miniclue.gen_clues.z(),
+  },
+
+  window = {
+    -- 500ms delay: shows up if you hesitate, stays hidden if you're fast.
+    delay = 500,
+    config = {
+      border = 'double', -- Matches your Gruvbox/Professional aesthetic
+    },
+  }
+})
