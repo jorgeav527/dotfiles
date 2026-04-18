@@ -23,6 +23,9 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = true
 vim.o.softtabstop = 2
+vim.opt.splitbelow = true -- Horizontal splits open below
+vim.opt.splitright = true -- Vertical splits open to the right
+vim.opt.cursorline = true -- Highlight the text line of the cursor
 
 -- Basic movement
 vim.keymap.set("n", "j", function()
@@ -47,6 +50,9 @@ vim.keymap.set("n", "<leader>bq", "<cmd>bdelete!<CR>", { desc = "Close current b
 vim.keymap.set("n", "<leader>bQ", "<cmd>%bd|e#|bd#<CR>", { desc = "Close all other buffers" })
 vim.keymap.set("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>bw", "<cmd>write<CR>")
+vim.keymap.set("n", "<leader>bs", "ggVG")
+vim.keymap.set("n", "<leader>by", ":%y+<CR>")
 
 -- Copy Paths
 vim.keymap.set("n", "<leader>ba", function()
@@ -94,13 +100,14 @@ vim.diagnostic.config({
 })
 
 -- Show diagnostics
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show diagnostics" })
+vim.keymap.set("n", "<leader>lt", vim.diagnostic.open_float, { desc = "Show diagnostics" })
+vim.keymap.set("n", "<leader>ld", vim.diagnostic.setqflist, { desc = "Open Project Diagnostic List" })
 
 -- Easily move between windows
 vim.keymap.set("n", "<C-Left>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-Right>", "<C-w><C-l>", { desc = "Move focus to the right window" })
--- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
--- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+vim.keymap.set("n", "<C-Down>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+vim.keymap.set("n", "<C-Up>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- Highlight yanks
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -163,23 +170,6 @@ require('mini.diff').setup({
   },
   mappings = {
     -- Navigation through your changes
-    goto_first = '[H',
-    goto_prev  = '[h',
-    goto_next  = ']h',
-    goto_last  = ']H',
-  },
-})
-require('mini.move').setup({
-  reindent_linewise = true,
-  mappings = {
-    -- Move visual selection
-    left = "<A-Left>",
-    right = "<A-Right>",
-    down = "<A-Down>",
-    up = "<A-Up>",
-
-    -- Move current line
-    line_left = "<A-Left>",
     line_right = "<A-Right>",
     line_down = "<A-Down>",
     line_up = "<A-Up>",
@@ -250,7 +240,6 @@ require('lualine').setup({
   },
 })
 
-vim.opt.showmode = false
 -- Optional: Hide the default "-- INSERT --" since the statusline shows it
 vim.opt.showmode = false
 
@@ -273,15 +262,18 @@ require("fzf-lua").setup({
   },
 })
 
-vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
 vim.keymap.set("n", "<leader><Tab>", "<cmd>FzfLua files<cr>", { desc = "Find files" })
-vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
+vim.keymap.set("n", "<leader>f/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
 vim.keymap.set("n", "<leader>fb", "<cmd>FzfLua buffers<cr>", { desc = "Find buffers" })
 
 -- Treesitter
 vim.cmd('syntax off') -- Make it obvious if treesitter is missing
 vim.api.nvim_create_autocmd('FileType', {
-  callback = function() pcall(vim.treesitter.start) end,
+  callback = function()
+    if not pcall(vim.treesitter.start) then
+      vim.cmd('syntax on')
+    end
+  end,
 })
 
 -- LSP
@@ -295,7 +287,7 @@ vim.lsp.config('vtsls', {
           {
             name = '@vue/typescript-plugin',
             -- Updated path based on your 'npm list -g' output
-            location = '/home/jorgeav527/.nvm/versions/node/v22.19.0/lib/node_modules/@vue/language-server',
+            location = '/home/jorgeav527/.nvm/versions/node/v24.11.1/lib/node_modules/@vue/language-server',
             languages = { 'vue' },
             configNamespace = 'typescript',
             enableForWorkspaceTypeScriptVersions = true,
