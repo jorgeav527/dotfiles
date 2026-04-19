@@ -68,6 +68,19 @@ vim.schedule(function()
   vim.o.clipboard = "unnamedplus"
 end)
 
+-- Restore last cursor position when reopening a file
+local last_cursor_group = vim.api.nvim_create_augroup("LastCursorGroup", {})
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = last_cursor_group,
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
 -------------------------------------------------------------------------------
 -- 3. PLUGINS (Bootstrapping/Loading)
 -------------------------------------------------------------------------------
@@ -271,7 +284,27 @@ require("neoscroll").setup({
 require("codediff").setup({})
 
 -- Markdown
-require("render-markdown").setup({})
+require('render-markdown').setup({
+  render_modes = { 'n' },
+  ------------------------------------------------------------------
+  -- HEADINGS (clean, not fancy)
+  ------------------------------------------------------------------
+  heading = {
+    icons = { '󰎤 ', '󰎧 ', '󰎪 ', '󰎭 ', '󰎱 ', '󰎳 ' },
+    position = 'inline', -- IMPORTANT: looks like GitHub
+    backgrounds = 'RenderMarkdownH1Bg',
+    foregrounds = 'RenderMarkdownH1',
+  },
+
+  ------------------------------------------------------------------
+  -- CODE BLOCKS (very important for readability)
+  ------------------------------------------------------------------
+  code = {
+    border = 'thin',
+    language_icon = false,
+    language_name = false,
+  },
+})
 
 -- DAP (Debugger)
 local dap = require("dap")
