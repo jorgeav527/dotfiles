@@ -5,6 +5,28 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- GLOBAL ICONS (Single source of truth)
+_G.Icons = {
+  diagnostics = {
+    Error = "E",
+    Warn  = "W",
+    Hint  = "H",
+    Info  = "I",
+  },
+
+  git = {
+    add          = " ",
+    change       = " ",
+    delete       = " ",
+    topdelete    = "󱅁 ",
+    changedelete = "󱅃 ",
+    untracked    = " ",
+    ignored      = "ⓘ ",
+    renamed      = "Ⓡ ",
+    conflict     = "ⓧ ",
+  }
+}
+
 -------------------------------------------------------------------------------
 -- 2. OPTIONS
 -------------------------------------------------------------------------------
@@ -126,13 +148,7 @@ require('mini.indentscope').setup({})
 require('mini.diff').setup({
   view = {
     style = 'sign',
-    signs = {
-      add          = ' ',
-      change       = ' ',
-      delete       = ' ',
-      topdelete    = '󱅁 ',
-      changedelete = '󱅃 ',
-    },
+    signs = Icons.git,
   },
   mappings = {
     apply      = '<leader>hs', -- Stage hunk
@@ -329,8 +345,7 @@ miniclue.setup({
 -------------------------------------------------------------------------------
 -- 5. LSP & DIAGNOSTICS
 -------------------------------------------------------------------------------
-local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
-for name, icon in pairs(signs) do
+for name, icon in pairs(Icons.diagnostics) do
   local hl = "DiagnosticSign" .. name
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
@@ -339,13 +354,12 @@ vim.diagnostic.config({
   severity_sort = true,
   update_in_insert = false,
   underline = true,
-  -- Use simple text for signs
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = "E",
-      [vim.diagnostic.severity.WARN]  = "W",
-      [vim.diagnostic.severity.HINT]  = "H",
-      [vim.diagnostic.severity.INFO]  = "I",
+      [vim.diagnostic.severity.ERROR] = Icons.diagnostics.Error,
+      [vim.diagnostic.severity.WARN]  = Icons.diagnostics.Warn,
+      [vim.diagnostic.severity.HINT]  = Icons.diagnostics.Hint,
+      [vim.diagnostic.severity.INFO]  = Icons.diagnostics.Info,
     },
   },
   float = { source = "if_many", border = "rounded" },
@@ -398,14 +412,24 @@ vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<leader>bd", "<cmd>bdelete!<CR>", { desc = "Delete current buffer" })
 vim.keymap.set("n", "<leader>bc", "<cmd>enew<CR>", { desc = "Create new buffer" })
-vim.keymap.set("n", "<leader>bq", "<cmd>bdelete!<CR>", { desc = "Close current buffer" })
-vim.keymap.set("n", "<leader>bQ", "<cmd>%bd|e#|bd#<CR>", { desc = "Close all other buffers" })
+vim.keymap.set("n", "<leader>bq", "<cmd>bdelete<CR>", { desc = "Close current buffer" })
+vim.keymap.set("n", "<leader>bQ", function()
+  local current = vim.api.nvim_get_current_buf()
+  local buffers = vim.api.nvim_list_bufs()
+
+  for _, bufnr in ipairs(buffers) do
+    if bufnr ~= current and vim.api.nvim_buf_is_loaded(bufnr) then
+      -- Using 'confirm' here will trigger your dialog if a buffer is unsaved
+      vim.cmd("confirm bdelete " .. bufnr)
+    end
+  end
+end, { desc = "Close all other buffers (with save prompt)" })
 vim.keymap.set("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<leader>bw", "<cmd>write<CR>", { desc = "Write buffer" })
 vim.keymap.set("n", "<leader>bs", "ggVG", { desc = "Select all buffer" })
 vim.keymap.set("n", "<leader>by", ":%y+<CR>", { desc = "Yank all buffer" })
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
+vim.keymap.set({ "i", "n", "v" }, "<Esc>", "<cmd>nohlsearch<cr><Esc>", { desc = "Clear highlights and escape" })
 
 -- Copy Paths
 vim.keymap.set("n", "<leader>ba", function()
