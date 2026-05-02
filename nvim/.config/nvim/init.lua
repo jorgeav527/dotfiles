@@ -419,7 +419,7 @@ vim.lsp.config('vtsls', {
 })
 
 vim.lsp.enable({
-  "ty", "ruff", "lua_ls", "html", "cssls", "jsonls", "vue_ls", "vtsls", "tailwindcss",
+  "ty", "ruff", "lua_ls", "html", "cssls", "jsonls", "vue_ls", "vtsls", "tailwindcss", "terraformls", "tflint",
 })
 
 -------------------------------------------------------------------------------
@@ -617,6 +617,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
           group = vim.api.nvim_create_augroup("LspFormatJson." .. bufnr, { clear = true }),
           buffer = bufnr,
           callback = function() vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 }) end,
+        })
+      end
+    end
+
+    -- TERRAFORM formatting
+    if filetype == "terraform" or filetype == "terraform-vars" then
+      if client.name == "terraformls" and client:supports_method("textDocument/formatting") then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatTerraform." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+          end,
         })
       end
     end
