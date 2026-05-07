@@ -418,8 +418,11 @@ vim.lsp.config('vtsls', {
   },
 })
 
+-- npm install -g dockerfile-language-server-nodejs
+-- npm install -g yaml-language-server
 vim.lsp.enable({
   "ty", "ruff", "lua_ls", "html", "cssls", "jsonls", "vue_ls", "vtsls", "tailwindcss", "terraformls", "tflint",
+  "dockerls", "yamlls",
 })
 
 -------------------------------------------------------------------------------
@@ -626,6 +629,30 @@ vim.api.nvim_create_autocmd("LspAttach", {
       if client.name == "terraformls" and client:supports_method("textDocument/formatting") then
         vim.api.nvim_create_autocmd("BufWritePre", {
           group = vim.api.nvim_create_augroup("LspFormatTerraform." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+          end,
+        })
+      end
+    end
+
+    -- DOCKER formatting
+    if filetype == "dockerfile" then
+      if client.name == "dockerls" and client:supports_method("textDocument/formatting") then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatDocker." .. bufnr, { clear = true }),
+          buffer = bufnr,
+          callback = function() vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 }) end,
+        })
+      end
+    end
+
+    -- YAML / DOCKER-COMPOSE formatting
+    if filetype == "yaml" then
+      if client.name == "yamlls" and client:supports_method("textDocument/formatting") then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormatYaml." .. bufnr, { clear = true }),
           buffer = bufnr,
           callback = function()
             vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
