@@ -100,8 +100,66 @@ vim.pack.add({
   "https://github.com/nvim-lualine/lualine.nvim",
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/rafamadriz/friendly-snippets",
-  { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") },
+  { src = "https://github.com/saghen/blink.cmp",           version = vim.version.range("1.x") },
+  { src = "https://github.com/nickjvandyke/opencode.nvim", version = "v0.8.2" },
+  "https://github.com/folke/snacks.nvim",
 })
+
+-- Snacks.nvim (dependency for opencode.nvim)
+require("snacks").setup({
+  input = {}, -- Enhances ask()
+  picker = {
+    -- Enhances select()
+    actions = {
+      opencode_send = function(...) return require("opencode").snacks_picker_send(...) end,
+    },
+    win = {
+      input = {
+        keys = {
+          ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+        },
+      },
+    },
+  },
+})
+
+-- Opencode.nvim
+vim.g.opencode_opts = {
+  server = {
+    port = 4096,            -- Connect to your tmux window's opencode
+    start = function() end, -- Don't auto-start, just connect
+  },
+}
+vim.o.autoread = true -- Required for opts.events.reload
+
+-- Keymaps with <leader>o prefix
+vim.keymap.set({ "n", "x" }, "<leader>oa", function()
+  require("opencode").ask("@this: ", { submit = true })
+end, { desc = "Ask opencode…" })
+
+vim.keymap.set({ "n", "x" }, "<leader>os", function()
+  require("opencode").select()
+end, { desc = "Execute opencode action…" })
+
+vim.keymap.set({ "n", "t" }, "<leader>ot", function()
+  require("opencode").toggle()
+end, { desc = "Toggle opencode" })
+
+vim.keymap.set({ "n", "x" }, "<leader>oo", function()
+  return require("opencode").operator("@this ")
+end, { expr = true, desc = "Add range to opencode" })
+
+vim.keymap.set("n", "<leader>oO", function()
+  return require("opencode").operator("@this ") .. "_"
+end, { expr = true, desc = "Add line to opencode" })
+
+vim.keymap.set("n", "<leader>ou", function()
+  require("opencode").command("session.half.page.up")
+end, { desc = "Scroll opencode up" })
+
+vim.keymap.set("n", "<leader>od", function()
+  require("opencode").command("session.half.page.down")
+end, { desc = "Scroll opencode down" })
 
 -------------------------------------------------------------------------------
 -- 4. PLUGIN CONFIGURATIONS
@@ -174,6 +232,19 @@ require('mini.diff').setup({
 })
 require('mini.jump2d').setup({
   view = { dim = true }
+})
+local hipatterns = require('mini.hipatterns')
+hipatterns.setup({
+  highlighters = {
+    -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+    fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+    hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+    todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+    note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+
+    -- Highlight hex color strings (`#rrggbb`) using that color
+    hex_color = hipatterns.gen_highlighter.hex_color(),
+  },
 })
 
 -- Statusline (Lualine)
@@ -365,6 +436,14 @@ miniclue.setup({
     { mode = 'n', keys = '<leader>d',  desc = '+[D]iagnostics/LSP' },
     { mode = 'n', keys = '<leader>h',  desc = '+[H]it (Git/Diff)' },
     { mode = 'n', keys = '<leader>f',  desc = '+[F]ind (Fzf)' },
+    { mode = 'n', keys = '<leader>o',  desc = '+[O]pencode' },
+    { mode = 'n', keys = '<leader>oa', desc = 'Ask opencode' },
+    { mode = 'n', keys = '<leader>os', desc = 'Select action' },
+    { mode = 'n', keys = '<leader>ot', desc = 'Toggle opencode' },
+    { mode = 'n', keys = '<leader>oo', desc = 'Add range' },
+    { mode = 'n', keys = '<leader>oO', desc = 'Add line' },
+    { mode = 'n', keys = '<leader>ou', desc = 'Scroll up' },
+    { mode = 'n', keys = '<leader>od', desc = 'Scroll down' },
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
     miniclue.gen_clues.marks(),
@@ -423,6 +502,16 @@ vim.lsp.config('vtsls', {
 vim.lsp.enable({
   "ty", "ruff", "lua_ls", "html", "cssls", "jsonls", "vue_ls", "vtsls", "tailwindcss", "terraformls", "tflint",
   "dockerls", "yamlls",
+})
+
+vim.lsp.config('cssls', {
+  settings = {
+    css = {
+      lint = {
+        unknownAtRules = "ignore",
+      },
+    },
+  },
 })
 
 -------------------------------------------------------------------------------
