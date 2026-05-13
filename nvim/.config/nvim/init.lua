@@ -58,7 +58,7 @@ vim.opt.hlsearch = true
 vim.opt.showmode = false
 
 -- Snappy escape
-vim.o.ttimeoutlen = 1
+vim.o.ttimeoutlen = 50
 
 -- Raise dialog if you close unsaved buffer (prevent mistakes)
 vim.o.confirm = true
@@ -132,34 +132,20 @@ vim.g.opencode_opts = {
 }
 vim.o.autoread = true -- Required for opts.events.reload
 
--- Keymaps with <leader>o prefix
-vim.keymap.set({ "n", "x" }, "<leader>oa", function()
+-- Corrected version
+vim.keymap.set({ "n", "x" }, "<leader>op", function()
   require("opencode").ask("@this: ", { submit = true })
-end, { desc = "Ask opencode…" })
+end, { desc = "Plan: Ask opencode" })
 
-vim.keymap.set({ "n", "x" }, "<leader>os", function()
+vim.keymap.set({ "n", "x" }, "<leader>ob", function()
   require("opencode").select()
-end, { desc = "Execute opencode action…" })
+end, { desc = "Build: Execute action" })
 
-vim.keymap.set({ "n", "t" }, "<leader>ot", function()
-  require("opencode").toggle()
-end, { desc = "Toggle opencode" })
+vim.keymap.set({ "n", "x" }, "go", function() return require("opencode").operator("@this ") end,
+  { desc = "Add range to opencode", expr = true })
+vim.keymap.set("n", "goo", function() return require("opencode").operator("@this ") .. "_" end,
+  { desc = "Add line to opencode", expr = true })
 
-vim.keymap.set({ "n", "x" }, "<leader>oo", function()
-  return require("opencode").operator("@this ")
-end, { expr = true, desc = "Add range to opencode" })
-
-vim.keymap.set("n", "<leader>oO", function()
-  return require("opencode").operator("@this ") .. "_"
-end, { expr = true, desc = "Add line to opencode" })
-
-vim.keymap.set("n", "<leader>ou", function()
-  require("opencode").command("session.half.page.up")
-end, { desc = "Scroll opencode up" })
-
-vim.keymap.set("n", "<leader>od", function()
-  require("opencode").command("session.half.page.down")
-end, { desc = "Scroll opencode down" })
 
 -------------------------------------------------------------------------------
 -- 4. PLUGIN CONFIGURATIONS
@@ -437,13 +423,10 @@ miniclue.setup({
     { mode = 'n', keys = '<leader>h',  desc = '+[H]it (Git/Diff)' },
     { mode = 'n', keys = '<leader>f',  desc = '+[F]ind (Fzf)' },
     { mode = 'n', keys = '<leader>o',  desc = '+[O]pencode' },
-    { mode = 'n', keys = '<leader>oa', desc = 'Ask opencode' },
-    { mode = 'n', keys = '<leader>os', desc = 'Select action' },
-    { mode = 'n', keys = '<leader>ot', desc = 'Toggle opencode' },
+    { mode = 'n', keys = '<leader>op', desc = 'Ask opencode' },
+    { mode = 'n', keys = '<leader>ob', desc = 'Select action' },
     { mode = 'n', keys = '<leader>oo', desc = 'Add range' },
     { mode = 'n', keys = '<leader>oO', desc = 'Add line' },
-    { mode = 'n', keys = '<leader>ou', desc = 'Scroll up' },
-    { mode = 'n', keys = '<leader>od', desc = 'Scroll down' },
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
     miniclue.gen_clues.marks(),
@@ -497,8 +480,16 @@ vim.lsp.config('vtsls', {
   },
 })
 
--- npm install -g dockerfile-language-server-nodejs
--- npm install -g yaml-language-server
+-- LSP Installations:
+-- npm install -g @vue/language-server (vue_ls)
+-- npm install -g vtsls (vtsls)
+-- npm install -g @tailwindcss/language-server (tailwindcss)
+-- npm install -g dockerfile-language-server-nodejs (dockerls)
+-- npm install -g yaml-language-server (yamlls)
+-- uv tool install ruff@latests (ruff)
+-- uv tool install ty@latest (ty)
+-- sudo apt install terraform terraform-ls (terraformls)
+-- cargo install tree-sitter-cli (treesitter)
 vim.lsp.enable({
   "ty", "ruff", "lua_ls", "html", "cssls", "jsonls", "vue_ls", "vtsls", "tailwindcss", "terraformls", "tflint",
   "dockerls", "yamlls",
