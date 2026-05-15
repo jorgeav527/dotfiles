@@ -285,8 +285,6 @@ require("blink.cmp").setup({
 
 -- FzfLua
 local fzf = require("fzf-lua")
-
--- 2. Call setup using that variable
 fzf.setup({
   keymap = {
     builtin = {
@@ -297,7 +295,8 @@ fzf.setup({
 })
 
 -- Oil.nvim
-require("oil").setup({
+local oil = require("oil")
+oil.setup({
   default_file_explorer = false,
   view_options = {
     show_hidden = true,
@@ -623,7 +622,9 @@ vim.keymap.set("n", "<leader>kr", dap.restart_frame, { desc = "Debug: Restart (U
 vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle Neo-tree" })
 
 -- Oil Keymap
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "-", function()
+  oil.open()
+end, { desc = "Open parent directory" })
 
 -------------------------------------------------------------------------------
 -- 7. AUTOCOMMANDS
