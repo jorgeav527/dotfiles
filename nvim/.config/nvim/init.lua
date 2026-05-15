@@ -89,10 +89,12 @@ vim.pack.add({
   "https://github.com/ellisonleao/gruvbox.nvim",
   "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nvim-treesitter/nvim-treesitter", -- also $ brew install tree-sitter-cli
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/MunifTanjim/nui.nvim",
+  "https://github.com/nvim-neo-tree/neo-tree.nvim",
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/karb94/neoscroll.nvim",
   "https://github.com/mfussenegger/nvim-dap",
-  "https://github.com/Eutrius/Otree.nvim",
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/nvim-mini/mini.nvim",
   "https://github.com/esmuellert/codediff.nvim",
@@ -241,8 +243,8 @@ require('lualine').setup({
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
-      statusline = { 'Otree', 'alpha', 'lazy' },
-      winbar = { 'Otree' },
+      statusline = { 'alpha', 'lazy' },
+      winbar = { '' },
     },
     always_divide_middle = true,
     globalstatus = true,
@@ -282,7 +284,10 @@ require("blink.cmp").setup({
 })
 
 -- FzfLua
-require("fzf-lua").setup({
+local fzf = require("fzf-lua")
+
+-- 2. Call setup using that variable
+fzf.setup({
   keymap = {
     builtin = {
       ["<C-d>"] = "preview-page-down",
@@ -293,40 +298,35 @@ require("fzf-lua").setup({
 
 -- Oil.nvim
 require("oil").setup({
+  default_file_explorer = false,
   view_options = {
     show_hidden = true,
   },
 })
 
--- Otree
-require("Otree").setup({
-  show_hidden = true,
-  show_ignore = true,
-  git_signs = true,
-  lsp_signs = true,
-  use_default_keymaps = false,
-  keymaps = {
-    ["<CR>"] = "actions.select",
-    ["l"] = "actions.select",
-    ["c"] = "actions.close_dir",
-    ["<Esc>"] = "actions.close_win",
-    ["p"] = "actions.goto_parent",
-    ["gd"] = "actions.goto_dir",
-    ["gD"] = "actions.goto_home_dir",
-    ["cd"] = "actions.change_home_dir",
-    ["L"] = "actions.open_dirs",
-    ["C"] = "actions.close_dirs",
-    ["o"] = "actions.oil_dir",
-    ["O"] = "actions.oil_into_dir",
-    ["t"] = "actions.open_tab",
-    ["v"] = "actions.open_vsplit",
-    ["h"] = "actions.open_split",
-    ["."] = "actions.toggle_hidden",
-    ["i"] = "actions.toggle_ignore",
-    ["r"] = "actions.refresh",
-    ["f"] = "actions.focus_file",
-    ["?"] = "actions.open_help",
+-- Neo-tree Configuration
+require("neo-tree").setup({
+  hijack_netrw_behavior = "open_default",
+  close_if_last_window = true,
+  window = {
+    width = 30,
+    mappings = {
+      ["<space>"] = "none",
+      ["l"] = "open",
+      ["c"] = "close_node",
+      ["v"] = "open_vsplit",
+      ["h"] = "open_split",
+    },
   },
+  filesystem = {
+    filtered_items = {
+      show_hidden = true,
+      hide_dotfiles = false,
+      hide_gitignored = false,
+    },
+    follow_current_file = { enabled = true },
+    use_libuv_file_watcher = true,
+  }
 })
 
 -- Neoscroll
@@ -570,13 +570,35 @@ vim.keymap.set("n", "<C-Down>", "<C-w><C-j>", { desc = "Move focus to the lower 
 vim.keymap.set("n", "<C-Up>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- FzfLua Keymaps
-vim.keymap.set("n", "<leader><Tab>", "<cmd>FzfLua files<cr>", { desc = "Find files" })
-vim.keymap.set("n", "<leader>f/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
-vim.keymap.set("n", "<leader>fb", "<cmd>FzfLua buffers<cr>", { desc = "Find buffers" })
+vim.keymap.set("n", "<leader>f<Tab>", fzf.files, { desc = "Find files" })
+vim.keymap.set("n", "<leader>f/", fzf.live_grep, { desc = "Find live grep" })
+vim.keymap.set("n", "<leader>fp", fzf.grep_project, { desc = "Fzf Grep Project" })
+vim.keymap.set("n", "<leader>f.", fzf.grep_curbuf, { desc = "Fzf Grep Current Buffer" })
+vim.keymap.set("n", "<leader>f*", fzf.grep_cword, { desc = "Fzf Grep Word" })
+vim.keymap.set("n", "<leader>fb", fzf.buffers, { desc = "Fzf Buffers" })
+vim.keymap.set("n", "<leader>fl", fzf.blines, { desc = "Fzf Buffer Lines (Current Only)" })
+vim.keymap.set("n", "<leader>fL", fzf.lines, { desc = "Fzf Lines (All Open Buffers)" })
+vim.keymap.set("n", "<leader>fq", fzf.quickfix, { desc = "Fzf Quickfix" })
+
+-- LSP Navigation
+vim.keymap.set("n", "<leader>fgd", fzf.lsp_definitions, { desc = "Go to Definition" })
+vim.keymap.set("n", "<leader>fgr", fzf.lsp_references, { desc = "Show References" })
+vim.keymap.set("n", "<leader>fgs", fzf.lsp_document_symbols, { desc = "Document Symbols" })
+vim.keymap.set("n", "<leader>fgS", fzf.lsp_workspace_symbols, { desc = "Workspace Symbols" })
+vim.keymap.set("n", "<leader>fgD", fzf.diagnostics_document, { desc = "Document Diagnostics" })
+
+-- Git workflow
+vim.keymap.set("n", "<leader>fhc", fzf.git_commits, { desc = "Git Commits" })
+vim.keymap.set("n", "<leader>fhb", fzf.git_branches, { desc = "Git Branches" })
+vim.keymap.set("n", "<leader>fhs", fzf.git_status, { desc = "Git Status" })
+
 
 -- Diagnostic Keymaps
 vim.keymap.set("n", "<leader>dt", vim.diagnostic.open_float, { desc = "Show diagnostics" })
 vim.keymap.set("n", "<leader>dq", vim.diagnostic.setqflist, { desc = "Open Project Diagnostic List" })
+
+-- Toggle Quickfix window
+vim.keymap.set("n", "<leader>qc", "<cmd>cclose<cr>", { desc = "Close Quickfix" })
 
 -- Git/Diff Keymaps
 vim.keymap.set("n", "<leader>ht", function() require("mini.diff").toggle_overlay(0) end,
@@ -598,7 +620,7 @@ vim.keymap.set("n", "<leader>kk", dap.step_out, { desc = "Debug: Step Out (Left)
 vim.keymap.set("n", "<leader>kr", dap.restart_frame, { desc = "Debug: Restart (Up)" })
 
 -- File Tree Keymap
-vim.keymap.set("n", "<leader>e", "<cmd>Otree<cr>", { desc = "Toggle Otree" })
+vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle Neo-tree" })
 
 -- Oil Keymap
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
