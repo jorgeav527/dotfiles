@@ -1,0 +1,127 @@
+local fzf = require('fzf-lua')
+local dap = require('dap')
+local dap_widgets = require('dap.ui.widgets')
+local oil = require('oil')
+
+vim.keymap.set({ 'n', 'x' }, '<leader>op', function()
+  require('opencode').ask('@this: ', { submit = true })
+end, { desc = 'Plan: Ask opencode' })
+
+vim.keymap.set({ 'n', 'x' }, '<leader>ob', function()
+  require('opencode').select()
+end, { desc = 'Build: Execute action' })
+
+vim.keymap.set({ 'n', 'x' }, 'go', function() return require('opencode').operator('@this ') end,
+  { desc = 'Add range to opencode', expr = true })
+vim.keymap.set('n', 'goo', function() return require('opencode').operator('@this ') .. '_' end,
+  { desc = 'Add line to opencode', expr = true })
+
+vim.keymap.set('n', 'j', function() return vim.v.count == 0 and 'gj' or 'j' end,
+  { expr = true, silent = true, desc = 'Down (wrap-aware)' })
+vim.keymap.set('n', 'k', function() return vim.v.count == 0 and 'gk' or 'k' end,
+  { expr = true, silent = true, desc = 'Up (wrap-aware)' })
+
+vim.keymap.set('n', 'x', '"_x', { desc = 'Delete char (no yank)' })
+vim.keymap.set('v', 'd', '"_d', { desc = 'Delete selection (no yank)' })
+vim.keymap.set('v', 'x', '"_x', { desc = 'Delete selection (no yank)' })
+vim.keymap.set('v', 'p', '"_dP', { desc = 'Paste (no yank)' })
+vim.keymap.set('n', 'c', '"_c', { desc = 'Change (no yank)' })
+vim.keymap.set('v', 'c', '"_c', { desc = 'Change (no yank)' })
+
+vim.keymap.set('n', '<leader>bn', '<cmd>bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<leader>bp', '<cmd>bprevious<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete!<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<leader>bc', '<cmd>enew<CR>', { desc = 'Create new buffer' })
+vim.keymap.set('n', '<leader>bq', '<cmd>bdelete<CR>', { desc = 'Close current buffer' })
+vim.keymap.set('n', '<leader>bQ', function()
+  local current = vim.api.nvim_get_current_buf()
+  local buffers = vim.api.nvim_list_bufs()
+
+  for _, bufnr in ipairs(buffers) do
+    if bufnr ~= current and vim.api.nvim_buf_is_loaded(bufnr) then
+      vim.cmd('confirm bdelete ' .. bufnr)
+    end
+  end
+end, { desc = 'Close all other buffers (with save prompt)' })
+vim.keymap.set('n', '<Tab>', '<cmd>bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-Tab>', '<cmd>bprevious<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>bw', '<cmd>write<CR>', { desc = 'Write buffer' })
+vim.keymap.set('n', '<leader>bs', 'ggVG', { desc = 'Select all buffer' })
+vim.keymap.set('n', '<leader>by', ':%y+<CR>', { desc = 'Yank all buffer' })
+vim.keymap.set({ 'i', 'n', 'v' }, '<Esc>', '<cmd>nohlsearch<cr><Esc>', { desc = 'Clear highlights and escape' })
+
+vim.keymap.set('n', '<leader>ba', function()
+  local path = vim.fn.expand('%:p')
+  vim.fn.setreg('+', path)
+  vim.notify('Copied absolute path: ' .. path)
+end, { desc = 'Copy Absolute Path' })
+
+vim.keymap.set('n', '<leader>br', function()
+  local fullpath = vim.fn.expand('%:p')
+  local cwd = vim.fn.getcwd()
+  cwd = cwd:gsub('([%-%.%+%[%]%(%)%$%^%%%?%*])', '%%%1')
+  local relative = fullpath:gsub('^' .. cwd .. '/', '')
+  vim.fn.setreg('+', relative)
+  vim.notify('Copied relative path: ' .. relative)
+end, { desc = 'Copy Relative Path' })
+
+vim.keymap.set('n', '<C-Left>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-Right>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-Down>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-Up>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+vim.keymap.set('n', '<leader>f<Tab>', fzf.files, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>f/', fzf.live_grep, { desc = 'Find live grep' })
+vim.keymap.set('n', '<leader>fp', fzf.grep_project, { desc = 'Fzf Grep Project' })
+vim.keymap.set('n', '<leader>f.', fzf.grep_curbuf, { desc = 'Fzf Grep Current Buffer' })
+vim.keymap.set('n', '<leader>f*', fzf.grep_cword, { desc = 'Fzf Grep Word' })
+vim.keymap.set('n', '<leader>fb', fzf.buffers, { desc = 'Fzf Buffers' })
+vim.keymap.set('n', '<leader>fl', fzf.blines, { desc = 'Fzf Buffer Lines (Current Only)' })
+vim.keymap.set('n', '<leader>fL', fzf.lines, { desc = 'Fzf Lines (All Open Buffers)' })
+vim.keymap.set('n', '<leader>fq', fzf.quickfix, { desc = 'Fzf Quickfix' })
+
+vim.keymap.set('n', '<leader>fgd', fzf.lsp_definitions, { desc = 'Fzf: Go to Definition' })
+vim.keymap.set('n', '<leader>fgr', fzf.lsp_references, { desc = 'Fzf: Show References' })
+vim.keymap.set('n', '<leader>fgs', fzf.lsp_document_symbols, { desc = 'Fzf: Document Symbols' })
+vim.keymap.set('n', '<leader>fgS', fzf.lsp_workspace_symbols, { desc = 'Fzf: Workspace Symbols' })
+vim.keymap.set('n', '<leader>fgD', fzf.diagnostics_document, { desc = 'Fzf: Document Diagnostics' })
+
+vim.keymap.set('n', '<leader>fhc', fzf.git_commits, { desc = 'Git Commits' })
+vim.keymap.set('n', '<leader>fhb', fzf.git_branches, { desc = 'Git Branches' })
+vim.keymap.set('n', '<leader>fhs', fzf.git_status, { desc = 'Git Status' })
+
+vim.keymap.set('n', '<leader>dt', vim.diagnostic.open_float, { desc = 'Show diagnostics' })
+vim.keymap.set('n', '<leader>dq', vim.diagnostic.setqflist, { desc = 'Open Project Diagnostic List' })
+
+vim.keymap.set('n', '<leader>qc', '<cmd>cclose<cr>', { desc = 'Close Quickfix' })
+
+vim.keymap.set('n', '<leader>ht', function() require('mini.diff').toggle_overlay(0) end,
+  { desc = 'Toggle mini.diff overlay' })
+vim.keymap.set('n', '<leader>hd', '<cmd>CodeDiff<CR>', { desc = 'Open CodeDiff (VS Code style)' })
+
+vim.keymap.set('n', '<leader>kb', dap.toggle_breakpoint, { desc = 'Debug toggle breakpoint' })
+vim.keymap.set('n', '<leader>kc', dap.continue, { desc = 'Debug continue' })
+vim.keymap.set('n', '<leader>kq', dap.terminate, { desc = 'Debug terminate' })
+vim.keymap.set('n', '<leader>kR', dap.repl.open, { desc = 'Debug open REPL' })
+vim.keymap.set('n', '<leader>kL', dap.run_last, { desc = 'Debug run last' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dh', dap_widgets.hover, { desc = 'Debug hover' })
+vim.keymap.set('n', '<leader>kS',
+  function() dap_widgets.centered_float(dap_widgets.scopes) end, { desc = 'Debug scopes' })
+vim.keymap.set('n', '<leader>kl', dap.step_over, { desc = 'Debug: Step Over (Down)' })
+vim.keymap.set('n', '<leader>ks', dap.step_into, { desc = 'Debug: Step Into (Right)' })
+vim.keymap.set('n', '<leader>kk', dap.step_out, { desc = 'Debug: Step Out (Left)' })
+vim.keymap.set('n', '<leader>kr', dap.restart_frame, { desc = 'Debug: Restart (Up)' })
+
+vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle<cr>', { desc = 'Toggle Neo-tree' })
+
+vim.keymap.set('n', '-', function()
+  oil.open()
+end, { desc = 'Open parent directory' })
+
+vim.keymap.set('v', '<Enter>', function()
+  vim.api.nvim_feedkeys(vim.keycode('an'), 'v', false)
+end, { desc = 'Select parent node (treesitter)' })
+
+vim.keymap.set('v', '<Backspace>', function()
+  vim.api.nvim_feedkeys(vim.keycode('in'), 'v', false)
+end, { desc = 'Select child node (treesitter)' })
