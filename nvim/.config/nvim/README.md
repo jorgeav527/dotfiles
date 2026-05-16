@@ -46,6 +46,14 @@ npm install -g @tailwindcss/language-server
 npm install -g dockerfile-language-server-nodejs    # dockerls
 npm install -g yaml-language-server                 # yamlls
 
+# 6.5. Install lua-language-server (from GitHub release)
+cd Download/
+curl -LO https://github.com/LuaLS/lua-language-server/releases/latest/download/lua-language-server-3.18.2-linux-x64.tar.gz
+mkdir lua-ls-tmp && cd lua-ls-tmp && tar -xzf ../lua-language-server-3.18.2-linux-x64.tar.gz
+sudo cp bin/lua-language-server /usr/local/bin/
+cd .. && rm -rf lua-ls-tmp lua-language-server-3.18.2-linux-x64.tar.gz
+lua-language-server --version
+
 # 7. Install Terraform tools (optional)
 sudo apt install terraform-ls
 # tflint: download from https://github.com/terraform-linters/tflint/releases
@@ -68,7 +76,7 @@ nvim
 | `tailwindcss` | @tailwindcss/language-server | `npm i -g @tailwindcss/language-server` |
 | `dockerls` | dockerfile-language-server-nodejs | `npm i -g dockerfile-language-server-nodejs` |
 | `yamlls` | yaml-language-server | `npm i -g yaml-language-server` |
-| `lua_ls` | lua-language-server | Build from [GitHub releases](https://github.com/LuaLS/lua-language-server/releases) |
+| `lua_ls` | lua-language-server | `curl -LO ... && mkdir tmp && cd tmp && tar -xzf ../*.tar.gz && sudo cp bin/lua-language-server /usr/local/bin/` (see step 6.5) |
 | `terraformls` | terraform-ls | `sudo apt install terraform-ls` |
 | `tflint` | tflint | Download from [releases](https://github.com/terraform-linters/tflint/releases) |
 

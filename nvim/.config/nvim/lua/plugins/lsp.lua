@@ -37,6 +37,23 @@ vim.lsp.config('vtsls', {
   },
 })
 
+vim.lsp.config('lua_ls', {
+  cmd = { 'lua-language-server' },
+  filetypes = { 'lua' },
+  root_markers = { '.luarc.json', '.git' },
+  settings = {
+    Lua = {
+      runtime = { version = 'LuaJIT' },
+      diagnostics = { globals = { 'vim' } },
+      workspace = {
+        checkThirdParty = false,
+        library = vim.api.nvim_get_runtime_file('', true),
+      },
+      telemetry = { enable = false },
+    },
+  },
+})
+
 vim.lsp.enable({
   'ty', 'ruff', 'lua_ls', 'html', 'cssls', 'jsonls', 'vue_ls', 'vtsls', 'tailwindcss', 'terraformls', 'tflint',
   'dockerls', 'yamlls',
