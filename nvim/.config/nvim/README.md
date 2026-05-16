@@ -1,107 +1,103 @@
-# 🚀 Neovim Configuration for Modern Development (v0.11.6+)
+# Neovim Configuration
 
-A highly modular, blazing-fast Neovim configuration tailored for Full-Stack Web Development and Systems Programming. Optimized for Neovim 0.11+ using the latest native LSP APIs.
+Modular Neovim 0.12+ configuration using native `vim.pack.add()`. Built for full-stack web development and systems programming on Debian 12/13.
 
----
+## Prerequisites
 
-## 🌟 Key Features
+- Neovim 0.12+ (build from source — see below)
+- `git`, `curl`, `ripgrep`, `fd-find`
+- A Nerd Font (e.g. JetBrainsMono Nerd Font)
+- `node` + `npm` (via nvm recommended)
+- `uv` (Python package installer)
+- Terraform tools (optional, for HCL files)
 
-- **LSP Power:** Native Neovim LSP setup using `vim.lsp.config` and `vim.lsp.enable`.
-- **Linting & Formatting:** Integrated via `efm-langserver` for consistent code style across 20+ languages.
-- **AI-Powered Coding:** `Codeium` integration for intelligent autocompletions.
-- **Fast Picker:** `fzf-lua` for instantaneous file searching, grepping, and symbol navigation.
-- **Rich UI:** `lualine` for a clean status bar.
-- **Advanced Rust Support:** Deep integration with `rustaceanvim` for cargo tasks and debugging.
-- **File Management:** `neo-tree` for intuitive project navigation.
-- **Distraction-Free:** `zen-mode` and `twilight` for focused coding sessions.
+## Installation
 
-## 🛠️ Supported Languages
+```bash
+# 1. Backup existing config
+mv ~/.config/nvim ~/.config/nvim.bak
+mv ~/.local/share/nvim ~/.local/share/nvim.bak
 
-`TypeScript`, `JavaScript`, `Go`, `Rust`, `Python`, `Lua`, `C/C++`, `Bash`, `Solidity`, `Docker`, `YAML`, `JSON`, `HTML`, `CSS`, `TailwindCSS`, `Vue`, `React`, `Svelte`, `Helm`.
+# 2. Clone this repo
+git clone <your-repo-url> ~/.config/nvim
 
-## 📋 Prerequisites
+# 3. Build Neovim 0.12+ from source
+sudo apt install build-essential cmake ninja-build gettext unzip
+git clone https://github.com/neovim/neovim ~/neovim
+cd ~/neovim
+make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+cd ~
 
-- **Neovim v0.11.6 or higher** (Required for the new LSP APIs used here).
-- **Git** (For plugin management).
-- **Ripgrep (rg)**: Required for fast searching.
-- **A Nerd Font**: Recommended for icons (e.g., JetBrainsMono Nerd Font).
-- **Node.js / Python / Go / Rust**: For various LSP servers and tools.
+# 4. Install system dependencies
+sudo apt install ripgrep fd-find git curl
 
-## 🚀 Installation
+# 5. Install Python tools (uv)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv tool install ruff
+uv tool install ty-lsp
 
-1. **Backup your current configuration:**
-   ```bash
-   mv ~/.config/nvim ~/.config/nvim.bak
-   mv ~/.local/share/nvim ~/.local/share/nvim.bak
-   ```
+# 6. Install Node.js LSP servers (via nvm)
+nvm install --lts  # if not already done
+npm install -g vscode-langservers-extracted        # html, cssls, jsonls
+npm install -g vtsls
+npm install -g @vue/language-server                 # vue_ls + vtsls vue plugin
+npm install -g @tailwindcss/language-server
+npm install -g dockerfile-language-server-nodejs    # dockerls
+npm install -g yaml-language-server                 # yamlls
 
-2. **Clone this repository:**
-   ```bash
-   git clone <your-repo-url> ~/.config/nvim
-   ```
+# 7. Install Terraform tools (optional)
+sudo apt install terraform-ls
+# tflint: download from https://github.com/terraform-linters/tflint/releases
 
-3. **Launch Neovim:**
-   ```bash
-   nvim
-   ```
-   `lazy.nvim` will automatically download and install all plugins.
-
-4. **Install External Tools:**
-   Open Neovim and run `:Mason` to install any missing LSP servers, linters, or formatters.
-
-## 📂 File Structure
-
-```text
-~/.config/nvim
-├── init.lua              # Main entry point
-├── lua
-│   ├── config
-│   │   ├── autocmds.lua  # Event-based logic (Format on save, etc.)
-│   │   ├── globals.lua   # Leader key and global variables
-│   │   ├── keymaps.lua   # Global keybindings
-│   │   └── options.lua   # Neovim options/settings
-│   ├── plugins           # Individual plugin configurations
-│   ├── servers           # LSP server setups (one file per server)
-│   └── utils             # Helper functions (LSP on_attach, etc.)
-└── README.md
+# 8. Launch Neovim — plugins load automatically on first require
+nvim
 ```
 
-## ⌨️ Keybindings
+## LSP Servers
 
-The **Leader key** is set to `<Space>`.
+| Server | Package | Command |
+|--------|---------|---------|
+| `ruff` | ruff | `uv tool install ruff` |
+| `ty` | ty-lsp | `uv tool install ty-lsp` |
+| `html` | vscode-langservers-extracted | `npm i -g vscode-langservers-extracted` |
+| `cssls` | vscode-langservers-extracted | `npm i -g vscode-langservers-extracted` |
+| `jsonls` | vscode-langservers-extracted | `npm i -g vscode-langservers-extracted` |
+| `vtsls` | vtsls | `npm i -g vtsls` |
+| `vue_ls` | @vue/language-server | `npm i -g @vue/language-server` |
+| `tailwindcss` | @tailwindcss/language-server | `npm i -g @tailwindcss/language-server` |
+| `dockerls` | dockerfile-language-server-nodejs | `npm i -g dockerfile-language-server-nodejs` |
+| `yamlls` | yaml-language-server | `npm i -g yaml-language-server` |
+| `lua_ls` | lua-language-server | Build from [GitHub releases](https://github.com/LuaLS/lua-language-server/releases) |
+| `terraformls` | terraform-ls | `sudo apt install terraform-ls` |
+| `tflint` | tflint | Download from [releases](https://github.com/terraform-linters/tflint/releases) |
 
-### General
-| Key | Action |
-|-----|--------|
-| `<leader>e` | Toggle File Explorer (Neo-tree) |
-| `<leader>z` | Toggle Zen Mode |
-| `<Tab>` | Next Buffer |
-| `<S-Tab>` | Previous Buffer |
-| `<C-s>` | Save File |
-| `<leader>bx` | Close Current Buffer |
+## File Structure
 
-### LSP & Navigation
-| Key | Action |
-|-----|--------|
-| `gd` | Goto Definition (`fzf-lua`) |
-| `gr` | Goto References (`fzf-lua`) |
-| `gI` | Goto Implementation (`fzf-lua`) |
-| `gD` | Goto Declaration |
-| `K` | Hover Documentation |
-| `gs` | Document Symbols (`fzf-lua`) |
-| `gS` | Workspace Symbols (`fzf-lua`) |
-| `<leader>ca` | Code Action |
-| `<leader>cr` | Rename Symbol |
-| `<leader>cd` | Line Diagnostics |
-| `[d` / `]d` | Prev/Next Diagnostic |
-
-## 🎥 Original Tutorials
-
-This configuration was inspired by and documented in the following tutorial series:
-- [Part 1: Options & Plugins](https://youtu.be/cdAMq2KcF4w)
-- [Part 2: LSP & AI Assistance](https://youtu.be/qp1OcolI6x0)
-- [Part 3: Git & Debugging](https://youtu.be/JN4Zbs0ypwM)
-
-## 📄 License
-
-Distributed under the GPLv3 License.
+```
+~/.config/nvim
+├── init.lua                  # Globals + 19 require() calls
+├── AGENTS.md                 # Full keymap reference & architecture
+├── lua/
+│   ├── options.lua           # vim.o / vim.opt settings
+│   ├── keymaps.lua           # All keybindings
+│   ├── autocommands.lua      # Generic autocmds (cursor, yank, comments)
+│   └── plugins/
+│       ├── pack.lua          # vim.pack.add() — registers all plugins
+│       ├── treesitter.lua    # Syntax fallback + incremental selection
+│       ├── gruvbox.lua       # Colorscheme
+│       ├── snacks.lua        # Snacks.nvim (opencode dependency)
+│       ├── opencode_cfg.lua  # opencode.nvim config
+│       ├── mini.lua          # All mini.nvim modules (icons, move, pairs, etc.)
+│       ├── mini_clue.lua     # mini.clue — keymap hints (must be last)
+│       ├── lualine.lua       # Statusline
+│       ├── blink_cmp.lua     # Completion
+│       ├── fzf_lua.lua       # File picker
+│       ├── oil_cfg.lua       # File viewer
+│       ├── neo_tree.lua      # File tree
+│       ├── neoscroll.lua     # Smooth scrolling
+│       ├── codediff.lua      # Diff viewer
+│       ├── render_markdown.lua # Markdown rendering
+│       ├── dap_cfg.lua       # Debugger (Python only)
+│       └── lsp.lua           # Diagnostics, LSP configs, format-on-save
+```
