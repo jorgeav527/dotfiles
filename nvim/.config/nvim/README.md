@@ -21,13 +21,13 @@ mv ~/.local/share/nvim ~/.local/share/nvim.bak
 # 2. Clone this repo
 git clone <your-repo-url> ~/.config/nvim
 
-# 3. Build Neovim 0.12+ from source
-sudo apt install build-essential cmake ninja-build gettext unzip
-git clone https://github.com/neovim/neovim ~/neovim
-cd ~/neovim
-make CMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
-cd ~
+# 3. Install Neovim 0.12+ (pre-built binary)
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+sudo rm -rf /opt/nvim-linux-x86_64
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+
+# Add this to ~/.bashrc or ~/.zshrc:
+#   export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # 4. Install system dependencies
 sudo apt install ripgrep fd-find git curl
