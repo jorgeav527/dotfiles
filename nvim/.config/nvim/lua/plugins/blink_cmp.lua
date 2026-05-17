@@ -1,10 +1,15 @@
-require('blink.cmp').setup({
+local cmp = require('blink.cmp')
+cmp.build()
+cmp.setup({
   keymap = {
-    preset = 'default',
-    ['<C-e>'] = { 'show', 'show_documentation', 'hide_documentation' },
-    ['<C-k>'] = { 'show_signature', 'hide_signature' },
-    ['<CR>'] = { 'accept', 'fallback' },
-    ['<Tab>'] = { 'select_next', 'fallback' },
-    ['<S-Tab>'] = { 'select_prev', 'fallback' },
+    preset = 'super-tab',
+    ['<C-s>'] = { 'show', 'show_documentation', 'hide_documentation' },
+    ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
+    ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
   },
+  completion = {
+    menu = { border = 'single' },
+    documentation = { window = { border = 'single' } },
+  },
+  signature = { window = { border = 'single' } },
 })

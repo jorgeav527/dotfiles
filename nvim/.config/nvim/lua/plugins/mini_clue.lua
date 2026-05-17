@@ -24,11 +24,7 @@ miniclue.setup({
     { mode = 'n', keys = '<leader>d',  desc = '+[D]iagnostics/LSP' },
     { mode = 'n', keys = '<leader>h',  desc = '+[H]it (Git/Diff)' },
     { mode = 'n', keys = '<leader>f',  desc = '+[F]ind (Fzf)' },
-    { mode = 'n', keys = '<leader>o',  desc = '+[O]pencode' },
-    { mode = 'n', keys = '<leader>op', desc = 'Ask opencode' },
-    { mode = 'n', keys = '<leader>ob', desc = 'Select action' },
-    { mode = 'n', keys = '<leader>oo', desc = 'Add range' },
-    { mode = 'n', keys = '<leader>oO', desc = 'Add line' },
+
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
     miniclue.gen_clues.marks(),

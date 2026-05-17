@@ -13,6 +13,7 @@ dap.adapters.debugpy = function(cb, config)
     })
   end
 end
+---@type dap.Configuration[]
 dap.configurations.python = {
   {
     type = 'debugpy',

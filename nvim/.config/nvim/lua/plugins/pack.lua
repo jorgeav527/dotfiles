@@ -12,8 +12,8 @@ vim.pack.add({
   'https://github.com/goolord/alpha-nvim',
   'https://github.com/nvim-lualine/lualine.nvim',
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+  'https://github.com/saghen/blink.lib',
   'https://github.com/rafamadriz/friendly-snippets',
-  { src = 'https://github.com/saghen/blink.cmp',           version = vim.version.range('1.x') },
-  { src = 'https://github.com/nickjvandyke/opencode.nvim', version = 'v0.8.2' },
+  { src = 'https://github.com/saghen/blink.cmp' },
   'https://github.com/folke/snacks.nvim',
 })

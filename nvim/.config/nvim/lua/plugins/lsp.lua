@@ -74,7 +74,7 @@ local formats = {
   python             = {
     'ruff',
     pre = function()
-      vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports.ruff' } }, apply = true })
+      vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports.ruff' }, diagnostics = {} }, apply = true })
       vim.api.nvim_echo({ { 'Ruff: Imports sorted & Formatted', 'None' } }, false, {})
     end
   },
@@ -83,13 +83,13 @@ local formats = {
   javascript         = {
     'vtsls',
     pre = function(bufnr)
-      vim.lsp.buf.execute_command({ command = 'typescript.organizeImports', arguments = { vim.api.nvim_buf_get_name(bufnr) } })
+      vim.lsp.buf.execute_cmd({ command = 'typescript.organizeImports', arguments = { vim.api.nvim_buf_get_name(bufnr) } })
     end
   },
   typescript         = {
     'vtsls',
     pre = function(bufnr)
-      vim.lsp.buf.execute_command({ command = 'typescript.organizeImports', arguments = { vim.api.nvim_buf_get_name(bufnr) } })
+      vim.lsp.buf.execute_cmd({ command = 'typescript.organizeImports', arguments = { vim.api.nvim_buf_get_name(bufnr) } })
     end
   },
   json               = { 'jsonls' },
@@ -117,7 +117,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
           buffer = bufnr,
           callback = function()
             if entry.pre then entry.pre(client.id, bufnr) end
-            vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+            vim.lsp.buf.format({ bufnr = bufnr, timeout_ms = 1000 })
           end,
         })
       end

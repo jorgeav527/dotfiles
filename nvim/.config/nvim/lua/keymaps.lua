@@ -3,19 +3,6 @@ local dap = require('dap')
 local dap_widgets = require('dap.ui.widgets')
 local oil = require('oil')
 
-vim.keymap.set({ 'n', 'x' }, '<leader>op', function()
-  require('opencode').ask('@this: ', { submit = true })
-end, { desc = 'Plan: Ask opencode' })
-
-vim.keymap.set({ 'n', 'x' }, '<leader>ob', function()
-  require('opencode').select()
-end, { desc = 'Build: Execute action' })
-
-vim.keymap.set({ 'n', 'x' }, 'go', function() return require('opencode').operator('@this ') end,
-  { desc = 'Add range to opencode', expr = true })
-vim.keymap.set('n', 'goo', function() return require('opencode').operator('@this ') .. '_' end,
-  { desc = 'Add line to opencode', expr = true })
-
 vim.keymap.set('n', 'j', function() return vim.v.count == 0 and 'gj' or 'j' end,
   { expr = true, silent = true, desc = 'Down (wrap-aware)' })
 vim.keymap.set('n', 'k', function() return vim.v.count == 0 and 'gk' or 'k' end,
@@ -89,6 +76,10 @@ vim.keymap.set('n', 'gO', fzf.lsp_document_symbols, { desc = 'Document symbols' 
 vim.keymap.set('n', 'gd', fzf.lsp_definitions, { desc = 'Go to definition' })
 vim.keymap.set('n', 'gD', fzf.lsp_declarations, { desc = 'Go to declaration' })
 vim.keymap.set('n', 'gy', fzf.lsp_workspace_symbols, { desc = 'Workspace symbols' })
+vim.keymap.set('n', 'K', function() vim.lsp.buf.hover({ border = 'single' }) end, { desc = 'LSP hover documentation' })
+vim.keymap.set('n', '<C-k>', function()
+  vim.lsp.buf.signature_help({ border = 'single' })
+end, { desc = 'LSP signature help' })
 
 vim.keymap.set('n', '<leader>fhc', fzf.git_commits, { desc = 'Git Commits' })
 vim.keymap.set('n', '<leader>fhb', fzf.git_branches, { desc = 'Git Branches' })
