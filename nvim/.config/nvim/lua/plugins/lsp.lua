@@ -94,7 +94,7 @@ local formats = {
   },
   json               = { 'jsonls' },
   jsonc              = { 'jsonls' },
-  terraform          = { 'terraformls' },
+  tf                 = { 'terraformls' },
   ['terraform-vars'] = { 'terraformls' },
   dockerfile         = { 'dockerls' },
   yaml               = { 'yamlls' },
