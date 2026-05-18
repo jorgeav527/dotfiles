@@ -127,3 +127,7 @@ For all available LSP configs, see the [nvim-lspconfig lsp directory](https://gi
 │       ├── dap_cfg.lua       # Debugger (Python only)
 │       └── lsp.lua           # Diagnostics, LSP configs, format-on-save
 ```
+
+
+### things I dont know
+cargo install tectonic
