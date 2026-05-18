@@ -1,5 +1,4 @@
 local cmp = require("blink.cmp")
-cmp.build()
 cmp.setup({
 	keymap = {
 		["<C-s>"] = { "show", "show_documentation", "hide_documentation" },

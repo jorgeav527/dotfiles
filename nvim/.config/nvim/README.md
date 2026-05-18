@@ -8,8 +8,13 @@ Modular Neovim 0.12+ configuration using native `vim.pack.add()`. Built for full
 - `git`, `curl`, `ripgrep`, `fd-find`
 - A Nerd Font (e.g. JetBrainsMono Nerd Font)
 - `node` + `npm` (via nvm recommended)
+- `npm install -g neovim`
 - `uv` (Python package installer)
+- `uv tool install --upgrade pynvim`
 - Terraform tools (optional, for HCL files)
+
+## Install inotify-tools for better file watching
+- `sudo apt install inotify-tools`
 
 ## Installation
 
@@ -34,13 +39,15 @@ sudo apt install ripgrep fd-find git curl
 
 # 5. Install Python tools (uv)
 curl -LsSf https://astral.sh/uv/install.sh | sh
-uv tool install ruff
-uv tool install ty-lsp
+uv tool install ruff@latest
+uv tool install ty@latest
+uv tool list
 
 # 6. Install Node.js LSP servers (via nvm)
 nvm install --lts  # if not already done
+npm install -g prettier
 npm install -g vscode-langservers-extracted        # html, cssls, jsonls
-npm install -g vtsls
+npm install -g @vtsls/language-server
 npm install -g @vue/language-server                 # vue_ls + vtsls vue plugin
 npm install -g @tailwindcss/language-server
 npm install -g dockerfile-language-server-nodejs    # dockerls
@@ -53,6 +60,8 @@ mkdir lua-ls-tmp && cd lua-ls-tmp && tar -xzf ../lua-language-server-3.18.2-linu
 sudo cp bin/lua-language-server /usr/local/bin/
 cd .. && rm -rf lua-ls-tmp lua-language-server-3.18.2-linux-x64.tar.gz
 lua-language-server --version
+# 6.6. Install stylua
+cargo install stylua
 
 # 7. Install Terraform tools (optional)
 sudo apt install terraform-ls

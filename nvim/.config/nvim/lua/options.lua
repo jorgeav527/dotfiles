@@ -3,11 +3,12 @@ vim.o.number = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
-vim.opt.signcolumn = 'yes:2'
-vim.opt.colorcolumn = '120'
+vim.opt.termguicolors = true
+vim.opt.signcolumn = "yes:2"
+vim.opt.colorcolumn = "120"
 vim.o.ignorecase = true
 vim.o.smartcase = true
-vim.opt.iskeyword:append('-')
+vim.opt.iskeyword:append("-")
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = true
@@ -19,5 +20,5 @@ vim.opt.hlsearch = true
 vim.opt.showmode = false
 vim.o.ttimeoutlen = 50
 vim.o.confirm = true
-vim.o.clipboard = 'unnamedplus'
+vim.o.clipboard = "unnamedplus"
 vim.o.autoread = true
