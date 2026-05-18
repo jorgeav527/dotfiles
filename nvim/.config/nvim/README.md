@@ -56,7 +56,13 @@ lua-language-server --version
 
 # 7. Install Terraform tools (optional)
 sudo apt install terraform-ls
-# tflint: download from https://github.com/terraform-linters/tflint/releases
+# tflint:
+curl -sSLO https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+curl -sSLO https://github.com/terraform-linters/tflint/releases/latest/download/checksums.txt
+sha256sum --ignore-missing -c checksums.txt
+unzip tflint_linux_amd64.zip
+sudo install -c -v tflint /usr/local/bin/
+rm tflint tflint_linux_amd64.zip checksums.txt
 
 # 8. Launch Neovim — plugins load automatically on first require
 nvim
@@ -78,7 +84,9 @@ nvim
 | `yamlls` | yaml-language-server | `npm i -g yaml-language-server` |
 | `lua_ls` | lua-language-server | `curl -LO ... && mkdir tmp && cd tmp && tar -xzf ../*.tar.gz && sudo cp bin/lua-language-server /usr/local/bin/` (see step 6.5) |
 | `terraformls` | terraform-ls | `sudo apt install terraform-ls` |
-| `tflint` | tflint | Download from [releases](https://github.com/terraform-linters/tflint/releases) |
+| `tflint` | tflint | See step 7 |
+
+For all available LSP configs, see the [nvim-lspconfig lsp directory](https://github.com/neovim/nvim-lspconfig/tree/master/lsp).
 
 ## File Structure
 
