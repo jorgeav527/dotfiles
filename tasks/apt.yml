@@ -1,6 +1,0 @@
-- name: Install APT Packages
-  apt:
-    name:
-      - htop
-      - ubuntu-restricted-extras
-      - steam-installer
