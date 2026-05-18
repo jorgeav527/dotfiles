@@ -1,0 +1,18 @@
+---
+- name: Setup Debian 13 Trixie dev machine
+  hosts: local
+  gather_facts: yes
+
+  vars_files:
+    - group_vars/all.yml
+
+  roles:
+    - common
+    - zsh
+    - terminal
+    - languages
+    - fonts
+    - docker
+    - desktop
+    - apps
+    - dotfiles

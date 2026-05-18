@@ -1,0 +1,28 @@
+---
+- name: Install Zsh and zoxide
+  ansible.builtin.apt:
+    name:
+      - zsh
+      - zoxide
+    state: present
+  become: true
+
+- name: Make Zsh default shell for current user
+  ansible.builtin.user:
+    name: "{{ user }}"
+    shell: /usr/bin/zsh
+  become: true
+
+- name: Create Zinit plugins directory
+  ansible.builtin.file:
+    path: "{{ home }}/.local/share/zinit"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Install Zinit
+  ansible.builtin.shell: |
+    bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+  args:
+    creates: "{{ home }}/.local/share/zinit/zinit.git"
+  become: false

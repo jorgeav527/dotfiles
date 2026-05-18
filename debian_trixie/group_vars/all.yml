@@ -1,0 +1,4 @@
+---
+home: "{{ lookup('env', 'HOME') }}"
+user: "{{ lookup('env', 'USER') }}"
+dotfiles_repo: "{{ home }}/Devspace/dotfiles"

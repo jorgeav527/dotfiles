@@ -1,0 +1,69 @@
+---
+- name: Install Neovim
+  ansible.builtin.apt:
+    name: neovim
+    state: present
+  become: true
+
+- name: Install LazyGit
+  ansible.builtin.apt:
+    name: lazygit
+    state: present
+  become: true
+
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /usr/share/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Download Brave GPG key
+  ansible.builtin.get_url:
+    url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    mode: '0644'
+  become: true
+
+- name: Add Brave repository
+  ansible.builtin.deb822_repository:
+    name: brave-browser
+    types: deb
+    uris: https://brave-browser-apt-release.s3.brave.com
+    suites: stable
+    components: main
+    architectures: amd64
+    signed_by: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+  become: true
+
+- name: Install Brave browser
+  ansible.builtin.apt:
+    name: brave-browser
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Download LibreWolf GPG key
+  ansible.builtin.get_url:
+    url: https://deb.librewolf.net/keyring.gpg
+    dest: /usr/share/keyrings/librewolf.gpg
+    mode: '0644'
+  become: true
+
+- name: Add LibreWolf repository
+  ansible.builtin.deb822_repository:
+    name: librewolf
+    types: deb
+    uris: https://deb.librewolf.net
+    suites: bookworm
+    components: main
+    architectures: amd64
+    signed_by: /usr/share/keyrings/librewolf.gpg
+  become: true
+
+- name: Install LibreWolf
+  ansible.builtin.apt:
+    name: librewolf
+    state: present
+    update_cache: yes
+  become: true
