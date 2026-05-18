@@ -46,6 +46,7 @@ uv tool list
 # 6. Install Node.js LSP servers (via nvm)
 nvm install --lts  # if not already done
 npm install -g prettier
+npm install -g @fsouza/prettierd
 npm install -g vscode-langservers-extracted        # html, cssls, jsonls
 npm install -g @vtsls/language-server
 npm install -g @vue/language-server                 # vue_ls + vtsls vue plugin
