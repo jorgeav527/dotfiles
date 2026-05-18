@@ -20,6 +20,10 @@
       "rev": "832f1ecc5f8b15a44cf7537e31d3266d657775b1",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
+    "conform.nvim": {
+      "rev": "18aeab3d63d350dcf44d64c462cc489a3412af40",
+      "src": "https://github.com/stevearc/conform.nvim"
+    },
     "fff.nvim": {
       "rev": "d56006d26f88658102adc46617381bf4a02b165f",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"

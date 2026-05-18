@@ -14,6 +14,8 @@ vim.pack.add({
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
   'https://github.com/saghen/blink.lib',
   'https://github.com/rafamadriz/friendly-snippets',
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/saghen/blink.cmp' },
   'https://github.com/folke/snacks.nvim',
+  'https://github.com/stevearc/conform.nvim',
 })
