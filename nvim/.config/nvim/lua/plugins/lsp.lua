@@ -28,4 +28,5 @@ vim.lsp.enable({
 	"tflint",
 	"ruff",
 	"ty",
+	"yamlls",
 })
