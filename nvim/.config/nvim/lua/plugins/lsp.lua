@@ -17,6 +17,13 @@ vim.lsp.config("vtsls", {
 	},
 })
 
+vim.filetype.add({
+	pattern = {
+		["docker%-compose%.?.*%.ya?ml"] = "yaml.docker-compose",
+		["compose%.?.*%.ya?ml"] = "yaml.docker-compose",
+	},
+})
+
 vim.lsp.enable({
 	"lua_ls",
 	"html",
@@ -29,4 +36,5 @@ vim.lsp.enable({
 	"ruff",
 	"ty",
 	"yamlls",
+	"docker_language_server",
 })

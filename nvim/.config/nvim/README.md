@@ -51,7 +51,7 @@ npm install -g vscode-langservers-extracted        # html, cssls, jsonls
 npm install -g @vtsls/language-server
 npm install -g @vue/language-server                 # vue_ls + vtsls vue plugin
 npm install -g @tailwindcss/language-server
-npm install -g dockerfile-language-server-nodejs    # dockerls
+go install github.com/docker/docker-language-server/cmd/docker-language-server@latest  # docker_lsp
 npm install -g yaml-language-server                 # yamlls
 
 # 6.5. Install lua-language-server (from GitHub release)
