@@ -1,9 +1,5 @@
 {
   "plugins": {
-    "alpha-nvim": {
-      "rev": "7563da4a861ee6b3ed674d0ee5c5c0bd19383a38",
-      "src": "https://github.com/goolord/alpha-nvim"
-    },
     "blink.cmp": {
       "rev": "2ef3db111181c5eef22a462aa0122349a6027f28",
       "src": "https://github.com/saghen/blink.cmp"

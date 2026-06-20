@@ -9,7 +9,6 @@ vim.pack.add({
 	"https://github.com/stevearc/oil.nvim",
 	"https://github.com/nvim-mini/mini.nvim",
 	"https://github.com/esmuellert/codediff.nvim",
-	"https://github.com/goolord/alpha-nvim",
 	"https://github.com/nvim-lualine/lualine.nvim",
 	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
 	"https://github.com/saghen/blink.lib",

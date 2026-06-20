@@ -7,6 +7,10 @@ require("nvim-treesitter")
 		"typescript",
 		"tsx",
 		"json",
+		"toml",
+		"markdown",
+		"markdown_inline",
+		"query",
 	})
 	:wait(300000)
 
@@ -16,13 +20,20 @@ vim.treesitter.language.register("vue", { "vue" })
 vim.treesitter.language.register("tsx", { "typescriptreact", "tsx" })
 vim.treesitter.language.register("javascript", { "javascript", "js" })
 
--- Enable treesitter highlighting for filetypes
 vim.api.nvim_create_autocmd("FileType", {
-	pattern = { "vue", "html", "css", "javascript", "typescript", "tsx", "json" },
+	pattern = {
+		"vue",
+		"html",
+		"css",
+		"javascript",
+		"typescript",
+		"tsx",
+		"json",
+		"markdown",
+	},
 	callback = function()
 		pcall(vim.treesitter.start)
 	end,
 })
 
--- Optional: Turn off syntax highlighting (treesitter replaces it)
-vim.cmd("syntax off")
+vim.cmd("syntax on")

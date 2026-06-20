@@ -1,3 +1,4 @@
-require('snacks').setup({
-  input = {},
+require("snacks").setup({
+	input = {},
+	image = {},
 })

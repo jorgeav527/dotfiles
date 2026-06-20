@@ -1,0 +1,38 @@
+# Theme
+theme = Gruvbox Dark Hard
+
+# Window
+maximize = true
+window-decoration = none
+background-opacity = 0.80
+window-padding-x = 3,0
+window-padding-y = 3,0
+
+# Font
+font-family = "JetBrainsMono Nerd Font"
+font-size = 11.5
+
+# Cursor
+cursor-style = block
+cursor-style-blink = true
+
+# Keybindings
+keybind = ctrl+shift+q=quit
+keybind = ctrl+shift+t=new_window
+
+# Disable all internal tab keybindings
+keybind = ctrl+shift+t=ignore
+keybind = ctrl+shift+tab=ignore
+keybind = ctrl+shift+w=ignore
+keybind = ctrl+tab=ignore
+keybind = ctrl+page_down=ignore
+keybind = ctrl+page_up=ignore
+keybind = alt+1=ignore
+keybind = alt+2=ignore
+keybind = alt+3=ignore
+keybind = alt+4=ignore
+keybind = alt+5=ignore
+keybind = alt+6=ignore
+keybind = alt+7=ignore
+keybind = alt+8=ignore
+keybind = alt+9=ignore

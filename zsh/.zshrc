@@ -58,7 +58,7 @@ alias l='ls -l'
 alias la='ls -la'
 alias lt='ls --tree'
 alias nv='nvim'
-alias ..='cd ..'
+alias t='tmux'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -85,7 +85,7 @@ if command -v fzf &>/dev/null; then
 fi
 
 if command -v zoxide &>/dev/null; then
-  eval "$(zoxide init --cmd cd zsh)"
+  eval "$(zoxide init zsh --cmd cd)"
 fi
 
 # Disable underline for valid paths in zsh-syntax-highlighting
