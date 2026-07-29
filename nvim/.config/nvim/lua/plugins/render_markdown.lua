@@ -3,8 +3,8 @@ require("render-markdown").setup({
 	heading = {
 		icons = { "󰎤 ", "󰎧 ", "󰎪 ", "󰎭 ", "󰎱 ", "󰎳 " },
 		position = "inline",
-		backgrounds = { "RenderMarkdownH1Bg" },
-		foregrounds = { "RenderMarkdownH1" },
+		-- backgrounds = { "RenderMarkdownH1Bg" },
+		-- foregrounds = { "RenderMarkdownH1" },
 	},
 	code = {
 		border = "thin",

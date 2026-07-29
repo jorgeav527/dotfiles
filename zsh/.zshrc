@@ -124,3 +124,6 @@ bindkey '^X^E' edit-command-line
 
 # opencode
 export PATH=/home/jorgeav527/.opencode/bin:$PATH
+
+# add Pulumi to the PATH
+export PATH=$PATH:/home/jorgeav527/.pulumi/bin

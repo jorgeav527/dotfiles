@@ -1,0 +1,11 @@
+2026-07-29T16:02:46.689178Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=10639
+2026-07-29T16:02:46.689311Z  INFO herdr::client: connecting to server path=/home/jorgeav527/.config/herdr/herdr-client.sock
+2026-07-29T16:02:46.692041Z  INFO herdr::client: handshake succeeded version=17 encoding=SemanticFrame
+2026-07-29T17:18:23.161642Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=10639
+2026-07-29T17:18:24.617198Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=20856
+2026-07-29T17:18:24.617287Z  INFO herdr::client: connecting to server path=/home/jorgeav527/.config/herdr/herdr-client.sock
+2026-07-29T17:18:24.689520Z  INFO herdr::client: handshake succeeded version=17 encoding=SemanticFrame
+2026-07-29T20:46:22.866135Z  INFO herdr::logging: herdr exiting event="app.shutdown" subsystem="client" outcome="completed" pid=20856
+2026-07-29T20:46:49.192030Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="client" outcome="started" pid=38576
+2026-07-29T20:46:49.192171Z  INFO herdr::client: connecting to server path=/home/jorgeav527/.config/herdr/herdr-client.sock
+2026-07-29T20:46:49.278785Z  INFO herdr::client: handshake succeeded version=17 encoding=SemanticFrame
