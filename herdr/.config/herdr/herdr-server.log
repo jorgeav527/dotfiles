@@ -232,3 +232,9 @@
 2026-07-29T21:26:11.697502Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/home/jorgeav527/.config/herdr/session.json workspaces=2
 2026-07-29T21:26:27.994682Z  INFO herdr::logging: spawning pane terminal event="pane.spawn.start" subsystem="pane" outcome="started" pane_id=16 rows=27 cols=97 scrollback_limit_bytes=10000000
 2026-07-29T21:26:27.998562Z  INFO herdr::logging: pane child spawned event="pane.spawned" subsystem="pane" outcome="ok" pane_id=16 pid=43892
+2026-07-29T21:27:16.326825Z  INFO herdr::logging: pane child exited event="pane.exit" subsystem="pane" outcome="completed" pane_id=16 status="ExitStatus { code: 0, signal: None }"
+2026-07-29T21:27:16.334002Z  INFO herdr::pane: pane session terminated pane=16 pid=43892 signal=Hangup
+2026-07-29T21:27:57.932293Z  INFO herdr::app::actions: copied selection to clipboard
+2026-07-29T21:37:05.140147Z  INFO herdr::logging: checking for updates event="update.check.start" subsystem="update" outcome="started"
+2026-07-29T22:07:05.141722Z  INFO herdr::logging: checking for updates event="update.check.start" subsystem="update" outcome="started"
+2026-07-29T22:14:10.713097Z  INFO herdr::app::actions: copied selection to clipboard
