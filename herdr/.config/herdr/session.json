@@ -7,11 +7,11 @@
       "identity_cwd": "/home/jorgeav527/Devspace/dotfiles/nvim/.config/nvim",
       "public_pane_numbers": {
         "3": 13,
-        "18": 16,
         "1": 11,
-        "2": 12,
         "17": 15,
-        "4": 14
+        "4": 14,
+        "18": 16,
+        "2": 12
       },
       "next_public_pane_number": 17,
       "public_tab_numbers": [
@@ -162,9 +162,9 @@
       "custom_name": "kroma-infra",
       "identity_cwd": "/home/jorgeav527/Devspace/kroma/infra",
       "public_pane_numbers": {
-        "8": 2,
         "9": 3,
-        "7": 1
+        "7": 1,
+        "8": 2
       },
       "next_public_pane_number": 4,
       "public_tab_numbers": [
@@ -301,8 +301,8 @@
       "identity_cwd": "/home/jorgeav527/Devspace/n8n_mexico/n8n",
       "public_pane_numbers": {
         "15": 8,
-        "14": 6,
-        "13": 1
+        "13": 1,
+        "14": 6
       },
       "next_public_pane_number": 9,
       "public_tab_numbers": [
