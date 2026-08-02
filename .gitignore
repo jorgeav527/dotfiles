@@ -13,3 +13,4 @@ tmux/.config/tmux/plugins/*
 
 *.log
 *.sock
+session.json
