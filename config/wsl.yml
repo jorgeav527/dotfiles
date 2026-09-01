@@ -1,0 +1,18 @@
+---
+- name: Provision Debian 13 WSL machine
+  hosts: all
+  gather_facts: yes
+
+  pre_tasks:
+    - name: Show target host
+      ansible.builtin.debug:
+        var: inventory_hostname
+      tags: [always]
+
+  roles:
+    - common
+
+  post_tasks:
+    - name: Verify git is available
+      ansible.builtin.command: git --version
+      changed_when: false
